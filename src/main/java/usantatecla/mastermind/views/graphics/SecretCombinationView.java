@@ -5,7 +5,7 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import usantatecla.mastermind.models.SecretCombination;
+import usantatecla.mastermind.controllers.StartController;
 import usantatecla.mastermind.views.MessageView;
 
 @SuppressWarnings("serial")
@@ -16,14 +16,17 @@ class SecretCombinationView extends JPanel {
 	private JLabel title;
 
 	private JLabel secretCombination;
+	
+	private StartController startController;
 
-	SecretCombinationView() {
+	SecretCombinationView(StartController startController) {
 		super();
+		this.startController = startController;
 		this.setLayout(new GridBagLayout());
 		this.title = new JLabel(SecretCombinationView.TITLE);
 		this.add(this.title, new Constraints(0, 0, 3, 1));
 		String text = "";
-		for (int i = 0; i < SecretCombination.getWidth(); i++) {
+		for (int i = 0; i < this.startController.getWidth(); i++) {
 			text += MessageView.SECRET.getMessage();
 		}
 		this.secretCombination = new JLabel(text);

@@ -1,15 +1,18 @@
 package usantatecla.mastermind.views.graphics;
 
-import usantatecla.mastermind.models.Game;
+import usantatecla.mastermind.controllers.ProposalController;
+import usantatecla.mastermind.controllers.ResumeController;
+import usantatecla.mastermind.controllers.StartController;
 import usantatecla.mastermind.views.View;
 
 public class GraphicsView extends View {
 
 	private GameView gameView;
 
-	public GraphicsView(Game game) {
-		super(game);
-		this.gameView = new GameView(this.game);
+	public GraphicsView(StartController startController, ProposalController proposalController,
+			ResumeController resumeController) {
+		super(startController, proposalController, resumeController);
+		this.gameView = new GameView(startController, proposalController);
 	}
 
 	@Override
@@ -25,10 +28,9 @@ public class GraphicsView extends View {
 	@Override
 	protected boolean isNewGame() {
 		ResumeDialog resumeDialog = new ResumeDialog();
-		boolean newGame = resumeDialog.isNewGame();
-		if (newGame) {
-			this.game.clear();
-			this.gameView = new GameView(this.game);
+		if (resumeDialog.isNewGame()) {
+			this.resumeController.clearGame();
+			this.gameView = new GameView(this.startController, this.proposalController);
 			return true;
 		} else {
 			this.gameView.setVisible(false);

@@ -3,7 +3,9 @@ package usantatecla.mastermind.models;
 import java.util.Collections;
 import java.util.Random;
 
-public class SecretCombination extends Combination {
+import usantatecla.mastermind.types.Color;
+
+class SecretCombination extends Combination {
 
 	SecretCombination() {
 		for(Color color: Color.values()) {

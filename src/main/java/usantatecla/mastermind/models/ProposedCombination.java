@@ -2,7 +2,13 @@ package usantatecla.mastermind.models;
 
 import java.util.List;
 
-public class ProposedCombination extends Combination {
+import usantatecla.mastermind.types.Color;
+
+class ProposedCombination extends Combination {
+
+	ProposedCombination(List<Color> colors) {
+		this.colors = colors;
+	}
 
 	boolean contains(Color color, int position) {
 		return this.colors.get(position) == color;
@@ -15,10 +21,6 @@ public class ProposedCombination extends Combination {
 			}
 		}
 		return false;
-	}
-
-	public List<Color> getColors() {
-		return this.colors;
 	}
 
 }

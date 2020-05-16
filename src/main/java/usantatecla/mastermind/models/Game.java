@@ -3,6 +3,8 @@ package usantatecla.mastermind.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import usantatecla.mastermind.types.Color;
+
 public class Game {
 
 	private static final int MAX_LONG = 10;
@@ -26,7 +28,8 @@ public class Game {
 		this.attempts = 0;
 	}
 
-	public void addProposedCombination(ProposedCombination proposedCombination) {
+	public void addProposedCombination(List<Color> colors) {
+		ProposedCombination proposedCombination = new ProposedCombination(colors);
 		this.proposedCombinations.add(proposedCombination);
 		this.results.add(this.secretCombination.getResult(proposedCombination));
 		this.attempts++;
@@ -44,12 +47,16 @@ public class Game {
 		return this.attempts;
 	}
 
-	public ProposedCombination getProposedCombination(int position) {
-		return this.proposedCombinations.get(position);
+	public List<Color> getColors(int position) {
+		return this.proposedCombinations.get(position).colors;
 	}
 
-	public Result getResult(int position) {
-		return this.results.get(position);
+	public int getBlacks(int position) {
+		return this.results.get(position).getBlacks();
+	}
+
+	public int getWhites(int position) {
+		return this.results.get(position).getWhites();
 	}
 
 }

@@ -1,6 +1,6 @@
 package usantatecla.mastermind.models;
 
-public class Result {
+class Result {
 
 	private int blacks = 0;
 
@@ -17,11 +17,11 @@ public class Result {
 		return this.blacks == Combination.getWidth();
 	}
 
-	public int getBlacks() {
+	int getBlacks() {
 		return this.blacks;
 	}
 
-	public int getWhites() {
+	int getWhites() {
 		return this.whites;
 	}
 

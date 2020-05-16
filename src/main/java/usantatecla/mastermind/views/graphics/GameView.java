@@ -1,31 +1,39 @@
 package usantatecla.mastermind.views.graphics;
 
 import java.awt.GridBagLayout;
+import java.util.List;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import usantatecla.mastermind.models.Game;
-import usantatecla.mastermind.models.ProposedCombination;
+import usantatecla.mastermind.controllers.ProposalController;
+import usantatecla.mastermind.controllers.StartController;
+import usantatecla.mastermind.types.Color;
+import usantatecla.mastermind.types.Error;
+import usantatecla.mastermind.views.ErrorView;
 import usantatecla.mastermind.views.MessageView;
 import usantatecla.mastermind.views.graphics.ProposedCombinationView;
 import usantatecla.mastermind.views.graphics.SecretCombinationView;
 
 @SuppressWarnings("serial")
 class GameView extends JFrame {
-
-	private static final String GAME_OVER = "Game Over";
 	
-	private Game game;
+	private static final String GAME_OVER = "Game Over";
 
 	private SecretCombinationView secretCombinationView;
 
 	private ProposedCombinationsView proposedCombinationsView;
 
 	private ProposalCombinationView proposalCombinationView;
+	
+	private StartController startController;
+	
+	private ProposalController proposalController;
 
-	GameView(Game game) {
+	GameView(StartController startController, ProposalController proposalController) {
 		super(MessageView.TITLE.getMessage());
-		this.game = game;
+		this.startController = startController;
+		this.proposalController = proposalController;
 		this.getContentPane().setLayout(new GridBagLayout());
 		this.setSize(400, 500);
 		this.setLocationRelativeTo(null);
@@ -35,28 +43,26 @@ class GameView extends JFrame {
 
 	void start() {
 		this.clear();
-		this.secretCombinationView = new SecretCombinationView();
+		this.secretCombinationView = new SecretCombinationView(this.startController);
 		this.getContentPane().add(this.secretCombinationView, new Constraints(0, 0, 3, 1));
-		this.proposedCombinationsView = new ProposedCombinationsView(this.game);
+		this.proposedCombinationsView = new ProposedCombinationsView(this.proposalController);
 		this.getContentPane().add(this.proposedCombinationsView, new Constraints(0, 1, 3, 10));
 		this.proposalCombinationView = new ProposalCombinationView(this.getRootPane());
 		this.getContentPane().add(this.proposalCombinationView, new Constraints(0, 11, 3, 1));
 		this.setVisible(true);
 	}
 
-	boolean propose() {
-		ProposedCombination proposedCombination = new ProposedCombination();
-		ProposedCombinationView proposedCombinationView = new ProposedCombinationView(proposedCombination);
+	boolean propose() {		
+		Error error;
 		do {
-			System.out.println("");
-			if (this.proposalCombinationView.getCharacters() != null) {
-				proposedCombinationView.read(this.proposalCombinationView.getCharacters());		
-				if (!proposedCombinationView.isValid()) {
-					this.proposalCombinationView.resetCharacters();
-				}		
+			List<Color> colors = new ProposedCombinationView().read(this.proposalCombinationView.getCharacters());
+			error = this.proposalController.addProposedCombination(colors);
+			if (error != null && this.proposalCombinationView.getCharacters() != "") {
+				JOptionPane.showMessageDialog(null, new ErrorView(error).getMessage(), "ERROR", JOptionPane.WARNING_MESSAGE);
+				error = null;
+				this.proposalCombinationView.resetCharacters();
 			}
-		} while (this.proposalCombinationView.getCharacters() == null);
-		this.game.addProposedCombination(proposedCombination);
+		} while (error != null || this.proposalCombinationView.getCharacters() == "");
 		this.proposalCombinationView.resetCharacters();
 		this.proposedCombinationsView.add();
 		this.setVisible(true);
@@ -64,9 +70,9 @@ class GameView extends JFrame {
 	}
 
 	private boolean drawGameOver() {
-		if (this.game.isWinner() || this.game.isLooser()) {
+		if (this.proposalController.isWinner() || this.proposalController.isLooser()) {
 			String message = "";
-			if (this.game.isWinner()) {
+			if (this.proposalController.isWinner()) {
 				message = MessageView.WINNER.getMessage();
 			} else {
 				message = MessageView.LOOSER.getMessage();
