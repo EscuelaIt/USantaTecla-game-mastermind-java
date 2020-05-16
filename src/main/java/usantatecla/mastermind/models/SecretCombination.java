@@ -1,11 +1,11 @@
-package usantatecla.mastermind;
+package usantatecla.mastermind.models;
 
 import java.util.Collections;
 import java.util.Random;
 
 public class SecretCombination extends Combination {
 
-	public SecretCombination() {
+	SecretCombination() {
 		for(Color color: Color.values()) {
 			this.colors.add(color);
 		}
@@ -16,7 +16,7 @@ public class SecretCombination extends Combination {
 		Collections.shuffle(this.colors);
 	}
 
-	public Result getResult(ProposedCombination proposedCombination) {
+	Result getResult(ProposedCombination proposedCombination) {
 		int blacks = 0;
 		for (int i = 0; i < this.colors.size(); i++) {
 			if (proposedCombination.contains(this.colors.get(i), i)) {
@@ -30,13 +30,6 @@ public class SecretCombination extends Combination {
 			}
 		}
 		return new Result(blacks, whites - blacks);
-	}
-	
-	public void writeln () {
-		for (int i = 0; i < Combination.getWidth(); i++) {
-			this.console.write(Message.SECRET.getMessage());
-		}
-		this.console.writeln();
 	}
 
 }
