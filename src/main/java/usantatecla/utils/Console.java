@@ -22,6 +22,10 @@ public class Console {
 		return input;
 	}
 
+	public String readString() {
+		return this.readString("");
+	}
+
 	public int readInt(String title) {
 		int input = 0;
 		boolean ok = false;
@@ -65,10 +69,6 @@ public class Console {
 
 	public void write(char character) {
 		System.out.print(character);
-	}
-
-	public void writeln(int integer) {
-		System.out.println(integer);
 	}
 
 	private void writeError(String format) {
