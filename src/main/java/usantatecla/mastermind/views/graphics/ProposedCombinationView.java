@@ -1,26 +1,27 @@
 package usantatecla.mastermind.views.graphics;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
-import usantatecla.mastermind.controllers.ProposalController;
-import usantatecla.mastermind.types.Color;
+import usantatecla.mastermind.models.Color;
+import usantatecla.mastermind.models.Combination;
+import usantatecla.mastermind.models.Error;
+import usantatecla.mastermind.models.ProposedCombination;
 import usantatecla.mastermind.views.ColorView;
+import usantatecla.mastermind.views.ErrorView;
 
 @SuppressWarnings("serial")
 class ProposedCombinationView extends JLabel {
 
-	public static final int ERROR_CODE = -1;
-	
-	private ProposalController proposalController;
+	private ProposedCombination proposedCombination;
 
-	ProposedCombinationView(ProposalController proposalController) {
-		this.proposalController = proposalController;
+	private Error error;
+
+	ProposedCombinationView(ProposedCombination proposedCombination) {
+		this.proposedCombination = proposedCombination;
 		String initials = "";
-		for (Color color : this.proposalController.getColors(this.proposalController.getAttempts()-1)) {
-			initials += new ColorView(color).getInitial();
+		for (Color color : proposedCombination.getColors()) {
+			initials += ColorView.INITIALS[color.ordinal()];
 		}
 		this.setText(initials);
 	}
@@ -28,12 +29,33 @@ class ProposedCombinationView extends JLabel {
 	ProposedCombinationView() {
 	}
 
-	List<Color> read(String characters) {
-		List<Color> colors = new ArrayList<Color>();
-		for (int i=0; i<characters.length(); i++) {
-			colors.add(ColorView.getInstance(characters.charAt(i)));
+	void read(String characters) {
+		this.error = null;
+		if (characters.length() != Combination.getWidth()) {
+			this.error = Error.WRONG_LENGTH;
+		} else {
+			for (int i = 0; i < characters.length(); i++) {
+				Color color = ColorView.getInstance(characters.charAt(i));
+				if (color == null) {
+					this.error = Error.WRONG_CHARACTERS;
+				} else {
+					if (this.proposedCombination.getColors().contains(color)) {
+						this.error = Error.DUPLICATED;
+					} else {
+						this.proposedCombination.getColors().add(color);
+					}
+				}
+			}
 		}
-		return colors;
+		if (this.error != null) {
+			JOptionPane.showMessageDialog(null, ErrorView.MESSAGES[this.error.ordinal()], "ERROR",
+					JOptionPane.WARNING_MESSAGE);
+			this.proposedCombination.getColors().clear();
+		}
+	}
+
+	public boolean isValid() {
+		return this.error == null;
 	}
 
 }

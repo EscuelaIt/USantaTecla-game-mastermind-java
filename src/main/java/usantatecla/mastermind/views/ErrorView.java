@@ -1,6 +1,6 @@
 package usantatecla.mastermind.views;
 
-import usantatecla.mastermind.types.Error;
+import usantatecla.mastermind.models.Error;
 
 public class ErrorView {
 
@@ -13,10 +13,6 @@ public class ErrorView {
 
 	public ErrorView(Error error) {
 		this.error = error;
-	}
-	
-	public String getMessage() {
-		return ErrorView.MESSAGES[this.error.ordinal()];
 	}
 	
 }

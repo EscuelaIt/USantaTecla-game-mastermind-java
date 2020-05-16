@@ -1,51 +1,37 @@
 package usantatecla.mastermind.views.console;
 
-import java.util.List;
-
-import usantatecla.mastermind.controllers.ProposalController;
-import usantatecla.mastermind.views.console.ErrorView;
-import usantatecla.utils.WithConsoleView;
+import usantatecla.mastermind.models.Game;
+import usantatecla.mastermind.models.ProposedCombination;
 import usantatecla.mastermind.views.MessageView;
-import usantatecla.mastermind.types.Error;
-import usantatecla.mastermind.types.Color;
+import usantatecla.utils.WithConsoleView;
 
 class ProposalView extends WithConsoleView {
 
-	private ProposalController proposalController;
+	private Game game;
 
 	private SecretCombinationView secretCombinationView;
 
-	private ProposedCombinationView proposedCombinationView;
-
-	private ResultView resultView;
-
-	ProposalView(ProposalController proposalController) {
-		this.proposalController = proposalController;
-		this.secretCombinationView = new SecretCombinationView(this.proposalController);
-		this.proposedCombinationView = new ProposedCombinationView(this.proposalController);
-		this.resultView = new ResultView(this.proposalController);
+	ProposalView(Game game) {
+		this.game = game;
+		this.secretCombinationView = new SecretCombinationView();
 	}
 
 	boolean interact() {
-		Error error;
-		do {
-			List<Color> colors = this.proposedCombinationView.read();
-			error = this.proposalController.addProposedCombination(colors);
-			if (error != null) {
-				new ErrorView(error).writeln();
-			}
-		} while (error != null);
+		ProposedCombination proposedCombination = new ProposedCombination();
+		ProposedCombinationView proposedCombinationView = new ProposedCombinationView(proposedCombination);
+		proposedCombinationView.read();
+		this.game.addProposedCombination(proposedCombination);
 		this.console.writeln();
-		new AttemptsView(this.proposalController).writeln();
+		new AttemptsView(this.game).writeln();
 		this.secretCombinationView.writeln();
-		for (int i = 0; i < this.proposalController.getAttempts(); i++) {
-			this.proposedCombinationView.write(i);
-			this.resultView.writeln(i);
+		for (int i = 0; i < this.game.getAttempts(); i++) {
+			new ProposedCombinationView(this.game.getProposedCombination(i)).write();
+			new ResultView(this.game.getResult(i)).writeln();
 		}
-		if (this.proposalController.isWinner()) {
+		if (this.game.isWinner()) {
 			this.console.writeln(MessageView.WINNER.getMessage());
 			return true;
-		} else if (this.proposalController.isLooser()) {
+		} else if (this.game.isLooser()) {
 			this.console.writeln(MessageView.LOOSER.getMessage());
 			return true;
 		}

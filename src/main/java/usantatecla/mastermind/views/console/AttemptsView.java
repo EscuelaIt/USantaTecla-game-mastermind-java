@@ -1,19 +1,18 @@
 package usantatecla.mastermind.views.console;
 
-import usantatecla.mastermind.controllers.ProposalController;
+import usantatecla.mastermind.models.Game;
 import usantatecla.mastermind.views.MessageView;
 import usantatecla.utils.WithConsoleView;
 
-public class AttemptsView extends WithConsoleView {
+class AttemptsView extends WithConsoleView {
 
-	private ProposalController proposalController;
+	private Game game;
 
-	AttemptsView(ProposalController proposalController) {
-		this.proposalController = proposalController;
+	AttemptsView(Game game) {
+		this.game = game;
 	}
 
 	void writeln() {
-		this.console.writeln(MessageView.ATTEMPTS.getMessage().replaceFirst("#attempts",
-				"" + this.proposalController.getAttempts()));
+		this.console.writeln(MessageView.ATTEMPTS.getMessage().replace("#attempts", "" + this.game.getAttempts()));
 	}
 }

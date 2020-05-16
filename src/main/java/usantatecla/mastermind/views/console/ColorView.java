@@ -1,6 +1,6 @@
 package usantatecla.mastermind.views.console;
 
-import usantatecla.mastermind.types.Color;
+import usantatecla.mastermind.models.Color;
 import usantatecla.utils.Console;
 
 class ColorView extends usantatecla.mastermind.views.ColorView {
