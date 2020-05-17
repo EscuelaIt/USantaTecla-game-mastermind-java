@@ -3,7 +3,7 @@ package usantatecla.mastermind.views.console;
 import usantatecla.mastermind.types.Color;
 import usantatecla.utils.Console;
 
-class ColorView extends mastermind.views.ColorView {
+class ColorView extends usantatecla.mastermind.views.ColorView {
 
 	ColorView(Color color) {
 		super(color);

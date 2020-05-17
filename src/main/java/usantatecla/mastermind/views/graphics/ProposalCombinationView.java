@@ -41,23 +41,23 @@ class ProposalCombinationView extends JPanel implements ActionListener, KeyListe
 		this.resetCharacters();
 	}
 
-	@Override
+	
 	public void actionPerformed(ActionEvent event) {
 		this.characters = this.textField.getText();
 		this.textField.setText("");
 	}
 
-	@Override
+	
 	public void keyPressed(KeyEvent e) {
 		this.characters = this.textField.getText();
 		this.textField.setText("");
 	}
 
-	@Override
+	
 	public void keyReleased(KeyEvent e) {
 	}
 
-	@Override
+	
 	public void keyTyped(KeyEvent e) {
 	}
 

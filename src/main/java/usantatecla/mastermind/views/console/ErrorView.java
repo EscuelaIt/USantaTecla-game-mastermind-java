@@ -3,7 +3,7 @@ package usantatecla.mastermind.views.console;
 import usantatecla.mastermind.types.Error;
 import usantatecla.utils.Console;
 
-class ErrorView extends mastermind.views.ErrorView {
+class ErrorView extends usantatecla.mastermind.views.ErrorView {
 
 	ErrorView(Error error) {
 		super(error);
