@@ -1,52 +1,37 @@
 package usantatecla.mastermind;
 
-import usantatecla.utils.WithConsoleModel;
-import usantatecla.utils.YesNoDialog;
+import java.util.HashMap;
+import java.util.Map;
+import usantatecla.mastermind.controllers.Controller;
+import usantatecla.mastermind.controllers.PlayController;
+import usantatecla.mastermind.controllers.ResumeController;
+import usantatecla.mastermind.controllers.StartController;
+import usantatecla.mastermind.models.Session;
+import usantatecla.mastermind.models.StateValue;
 
-public class Mastermind extends WithConsoleModel {
+public class Mastermind {
 
-	private Game game;
+	private Session session;
+
+	private Map<StateValue, Controller> controllers;
 
 	private Mastermind() {
-		this.game = new Game();
+		this.session = new Session();
+		this.controllers = new HashMap<StateValue, Controller>();
+		this.controllers.put(StateValue.INITIAL, new StartController(this.session));
+		this.controllers.put(StateValue.IN_GAME, new PlayController(this.session));
+		this.controllers.put(StateValue.FINAL, new ResumeController(this.session));
+		this.controllers.put(StateValue.EXIT, null);
 	}
 
-	public void play() {
-		boolean resume;
+	private void play() {
+		Controller controller;
 		do {
-			this.console.writeln(Message.TITLE.getMessage());
-			this.game.getSecretCombination().writeln();
-			boolean finished = false;
-			do {
-				int error;
-				do {
-					int[] codes = new ProposedCombination().read();
-					error = this.game.proposeCombination(codes);
-					if (error != Game.NO_ERROR) {
-						this.console.writeln(Error.values()[error].getMessage());
-					}
-				} while (error != Game.NO_ERROR);
-				this.console.writeln();
-				this.console.writeln(Message.TURN.getMessage().replaceFirst("#turn", "" + game.getTurn()));
-				this.game.getSecretCombination().writeln();
-				int[][][] allCodes = this.game.getCodes();
-				for (int i = 0; i < allCodes.length; i++) {
-					new ProposedCombination().write(allCodes[i][0]);
-					new Result(allCodes[i][1][0], allCodes[i][1][1]).writeln();
-				}
-				if (this.game.isWinner()) {
-					this.console.writeln(Message.WINNER.getMessage());
-					finished = true;
-				} else if (this.game.isLooser()) {
-					this.console.writeln(Message.LOOSER.getMessage());
-					finished = true;
-				}
-			} while (!finished);
-			resume = new YesNoDialog().read(Message.RESUME.getMessage());
-			if (resume) {
-				this.game.clear();
+			controller = this.controllers.get(this.session.getValueState());
+			if (controller != null) {
+				controller.control();
 			}
-		} while (resume);
+		} while (controller != null);
 	}
 
 	public static void main(String[] args) {
