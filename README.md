@@ -33,7 +33,7 @@ Santa Tecla \<<parqueNaturalSantaTecla@gmail.com>\>
 
 ### Arquitectura
 
-    ![your-UML-diagram-name](https://github.com/USantaTecla/mastermind/blob/domainModel/umls/arquitectura.iuml)
+    ![your-UML-diagram-name](https://raw.githubusercontent.com/USantaTecla/mastermind/domainModel/umls/arquitectura.iuml?token=ALK4OEBUY2EVOUXACPA5BUC62Y2KO)
 
 ### Paquete *mastermind*
 
