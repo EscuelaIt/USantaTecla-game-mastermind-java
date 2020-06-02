@@ -27,13 +27,14 @@ Santa Tecla \<<parqueNaturalSantaTecla@gmail.com>\>
 </tbody>
 </table>
 
+
 ## Vista de Lógica/Diseño
 
 -   Aplicación del **Modelo del Dominio** mediante Estrategias de **Análisis Formal**, **Análisis Clásico**, **Experto del Dominio**, **Reparto de Responsabilidades**, …​
 
 ### Arquitectura
 
-    ![your-UML-diagram-name](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/USantaTecla/mastermind/domainModel/umls/arquitectura.iuml?token=ALK4OEBUY2EVOUXACPA5BUC62Y2KO)
+ ![arquitectura](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/USantaTecla/mastermind/domainModel/umls/arquitectura.iuml?token=ALK4OEBUY2EVOUXACPA5BUC62Y2KO)
 
 ### Paquete *mastermind*
 
