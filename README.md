@@ -34,7 +34,9 @@ Santa Tecla \<<parqueNaturalSantaTecla@gmail.com>\>
 
 ### Arquitectura
 
- ![arquitectura](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/USantaTecla/mastermind/domainModel/umls/arquitectura.iuml?token=ALK4OEBUY2EVOUXACPA5BUC62Y2KO)
+ ![arquitectura](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/USantaTecla/mastermind/domainModel/umls/arquitectura.iuml)
+
+ ![example-uml](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/jonashackt/plantuml-markdown/master/example-uml.iuml)
 
 ### Paquete *mastermind*
 
