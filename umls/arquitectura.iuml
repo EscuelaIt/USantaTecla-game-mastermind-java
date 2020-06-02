@@ -1,0 +1,10 @@
+@startuml
+package mastermind #DDDDDD { }
+    package java.util{ }
+    mastermind .down.> java.util
+    mastermind .down.> mastermind.utils
+
+    package mastermind.utils #DDDDDD { }
+    package java.io{ }
+    mastermind.utils .down.> java.io
+@enduml
