@@ -248,5 +248,5 @@ Last updated 2019-10-01 13:46:58 +0200
                 
                 setTimeout(typeWriterAll, speed);
                 
-                </script>
+</script>
 </html>
