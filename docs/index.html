@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.8">
 <meta name="author" content="Santa Tecla">
-<title>Master Mind. Solucion 2.1. documentView</title>
+<title>Master Mind. Solución 1.1. domainModel</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -439,7 +439,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="book">
 <div id="header">
-<h1>Master Mind. Solucion 2.1. <strong>documentView</strong></h1>
+<h1>Master Mind. Solución 1.1. <strong>domainModel</strong></h1>
 <div class="details">
 <span id="author" class="author">Santa Tecla</span><br>
 <span id="email" class="email"><a href="mailto:parqueNaturalSantaTecla@gmail.com">parqueNaturalSantaTecla@gmail.com</a></span><br>
@@ -453,8 +453,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#arquitectura">Arquitectura</a></li>
 <li><a href="#paquete-mastermind">Paquete <em>mastermind</em></a></li>
-<li><a href="#paquete-mastermind-views">Paquete <em>mastermind.views</em></a></li>
-<li><a href="#paquete-mastermind-models">Paquete <em>mastermind.models</em></a></li>
 <li><a href="#paquete-mastermind-utils">Paquete <em>mastermind.utils</em></a></li>
 </ul>
 </li>
@@ -520,7 +518,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p>Arquitectura Documento/Vista mediante <strong>Patrón de Vista Separada</strong></p>
+<p>Aplicación del <strong>Modelo del Dominio</strong> mediante Estrategias de <strong>Análisis Formal</strong>, <strong>Análisis Clásico</strong>, <strong>Experto del Dominio</strong>, <strong>Reparto de Responsabilidades</strong>, &#8230;&#8203;</p>
 </li>
 </ul>
 </div>
@@ -528,7 +526,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="arquitectura">Arquitectura</h3>
 <div class="imageblock">
 <div class="content">
-<img src="images/version2Arquitectura.svg" alt="version2Arquitectura" width="356" height="420">
+<img src="images/version1Arquitectura.svg" alt="version1Arquitectura" width="274" height="305">
 </div>
 </div>
 </div>
@@ -536,23 +534,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="paquete-mastermind">Paquete <em>mastermind</em></h3>
 <div class="imageblock">
 <div class="content">
-<img src="images/version2Mastermind.svg" alt="version2Mastermind" width="364" height="329">
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="paquete-mastermind-views">Paquete <em>mastermind.views</em></h3>
-<div class="imageblock">
-<div class="content">
-<img src="images/mastermindViews.svg" alt="mastermindViews" width="1285" height="862">
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="paquete-mastermind-models">Paquete <em>mastermind.models</em></h3>
-<div class="imageblock">
-<div class="content">
-<img src="images/paqueteMastermindModel.svg" alt="paqueteMastermindModel" width="682" height="944">
+<img src="images/version1Mastermind.svg" alt="version1Mastermind" width="767" height="1221">
 </div>
 </div>
 </div>
@@ -560,7 +542,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="paquete-mastermind-utils">Paquete <em>mastermind.utils</em></h3>
 <div class="imageblock">
 <div class="content">
-<img src="images/mastermindUtils2.svg" alt="mastermindUtils2" width="456" height="575">
+<img src="images/mastermindUtils1.svg" alt="mastermindUtils1" width="456" height="548">
 </div>
 </div>
 </div>
@@ -574,7 +556,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p><span class="red line-through"><em><strong>Método largo</strong>: Método "play" de Mastermind,&#8230;&#8203;</em></span></p>
+<p><span class="red"><em><strong>Método largo</strong>: Método "play" de Mastermind,&#8230;&#8203;</em></span></p>
 </li>
 </ul>
 </div>
@@ -588,16 +570,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p><span class="red line-through"><em><strong>Clases Grandes</strong>: los Modelos asumen la responsabilidad y crecen en líneas, métodos, atributos, &#8230;&#8203; con cada nueva tecnología</em></span></p>
+<p><span class="red"><em><strong>Clases Grandes</strong>: los Modelos asumen la responsabilidad y crecen en líneas, métodos, atributos, &#8230;&#8203; con cada nueva tecnología</em></span></p>
 </li>
 <li>
-<p><span class="red line-through"><em><strong>Alto acoplamiento</strong>: los Modelos con cada nueva tecnología de interfaz (consola, gráficos, web, &#8230;&#8203;)</em></span></p>
+<p><span class="red"><em><strong>Alto acoplamiento</strong>: los Modelos con cada nueva tecnología de interfaz (consola, gráficos, web, &#8230;&#8203;)</em></span></p>
 </li>
 <li>
-<p><span class="red line-through"><em><strong>Baja cohesión</strong>: cada Modelo está gestionando sus atributos y las tecnologías de interfaz</em></span></p>
+<p><span class="red"><em><strong>Baja cohesión</strong>: cada Modelo está gestionando sus atributos y las tecnologías de interfaz</em></span></p>
 </li>
 <li>
-<p><span class="red line-through"><em><strong>Open/Close</strong>: hay que modificar los modelos que estaban funcionando previamente para escoger una tecnología de vista u otra (if&#8217;s anidados)</em></span></p>
+<p><span class="red"><em><strong>Open/Close</strong>: hay que modificar los modelos que estaban funcionando previamente para escoger una tecnología de vista u otra (if&#8217;s anidados)</em></span></p>
 </li>
 </ul>
 </div>
@@ -625,7 +607,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sectionbody">
 <div class="imageblock">
 <div class="content">
-<img src="images/diagramaImplementacion.svg" alt="diagramaImplementacion" width="882" height="158">
+<img src="images/diagramaImplementacion.svg" alt="diagramaImplementacion" width="518" height="158">
 </div>
 </div>
 </div>
@@ -656,7 +638,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1<br>
-Last updated 2019-10-01 14:13:27 +0200
+Last updated 2019-10-01 13:46:58 +0200
 </div>
 </div>
 <script>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="305px" preserveAspectRatio="none" style="width:274px;height:305px;" version="1.1" viewBox="0 0 274 305" width="274px" zoomAndPan="magnify"><defs><filter height="300%" id="fd4huzbub7i3h" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><polygon fill="#DDDDDD" filter="url(#fd4huzbub7i3h)" points="62.5,8,150.5,8,157.5,31.6094,164.5,31.6094,164.5,63.2188,62.5,63.2188,62.5,8" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="62.5" x2="157.5" y1="31.6094" y2="31.6094"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="82" x="66.5" y="24.5332">mastermind</text><polygon fill="#FFFFFF" filter="url(#fd4huzbub7i3h)" points="6,123,67,123,74,146.6094,81,146.6094,81,178.2188,6,178.2188,6,123" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="6" x2="74" y1="146.6094" y2="146.6094"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="55" x="10" y="139.5332">java.util</text><polygon fill="#DDDDDD" filter="url(#fd4huzbub7i3h)" points="116.5,123,238.5,123,245.5,146.6094,252.5,146.6094,252.5,178.2188,116.5,178.2188,116.5,123" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="116.5" x2="245.5" y1="146.6094" y2="146.6094"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="116" x="120.5" y="139.5332">mastermind.utils</text><polygon fill="#FFFFFF" filter="url(#fd4huzbub7i3h)" points="151.5,238,203.5,238,210.5,261.6094,217.5,261.6094,217.5,293.2188,151.5,293.2188,151.5,238" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="151.5" x2="210.5" y1="261.6094" y2="261.6094"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="46" x="155.5" y="254.5332">java.io</text><!--link mastermind to java.util--><path d="M96.911,63.279 C86.6242,79.885 73.3711,101.279 62.6404,118.602 " fill="none" id="mastermind-java.util" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="#A80036" points="59.9699,122.913,68.1097,117.3683,62.6029,118.6624,61.3088,113.1556,59.9699,122.913" style="stroke: #A80036; stroke-width: 1.0;"/><!--link mastermind to mastermind.utils--><path d="M130.326,63.279 C140.76,79.885 154.202,101.279 165.086,118.602 " fill="none" id="mastermind-mastermind.utils" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="#A80036" points="167.795,122.913,166.3931,113.1644,165.1346,118.6795,159.6195,117.4211,167.795,122.913" style="stroke: #A80036; stroke-width: 1.0;"/><!--link mastermind.utils to java.io--><path d="M184.5,178.279 C184.5,194.6038 184.5,215.5556 184.5,232.7176 " fill="none" id="mastermind.utils-java.io" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="#A80036" points="184.5,237.9128,188.5,228.9128,184.5,232.9128,180.5,228.9128,184.5,237.9128" style="stroke: #A80036; stroke-width: 1.0;"/><!--
+@startuml
+
+package mastermind #DDDDDD { }
+package java.util{ }
+mastermind .down.> java.util
+mastermind .down.> mastermind.utils
+
+package mastermind.utils #DDDDDD { }
+package java.io{ }
+mastermind.utils .down.> java.io
+
+@enduml
+
+PlantUML version 1.2019.05(Sat Apr 20 18:45:36 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 1.8.0_222-b10
+Operating System: Windows 10
+OS Version: 10.0
+Default Encoding: windows-1252
+Language: es
+Country: ES
+--></g></svg>
