@@ -1,5 +1,7 @@
 package usantatecla.mastermind;
 
+import usantatecla.utils.Console;
+
 enum Error {
 	DUPLICATED("Repeated colors"),
 	WRONG_CHARACTERS("Wrong colors, they must be: " + Color.allInitials()),
@@ -11,8 +13,8 @@ enum Error {
 		this.message = message;
 	}
 
-	String getMessage() {
-		return this.message;
+	void writeln() {
+		new Console().writeln(this.message);		
 	}
 	
 }

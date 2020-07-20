@@ -5,48 +5,68 @@ import usantatecla.utils.YesNoDialog;
 
 public class Mastermind extends WithConsoleModel {
 
-	private Game game;
+	private static final int MAX_LONG = 10;
+
+	private SecretCombination secretCombination;
+
+	private ProposedCombination[] proposedCombinations;
+
+	private Result[] results;
+
+	private int attempts;
 
 	private Mastermind() {
-		this.game = new Game();
+		this.clear();
 	}
 
-	public void play() {
-		boolean resume;
+	private void clear() {
+		this.secretCombination = new SecretCombination();
+		this.proposedCombinations = new ProposedCombination[Mastermind.MAX_LONG];
+		this.results = new Result[Mastermind.MAX_LONG];
+		this.attempts = 0;
+	}
+
+	private void play() {
+		boolean newGame;
 		do {
-			this.console.writeln(Message.TITLE.getMessage());
-			this.game.getSecretCombination().writeln();
+			Message.TITLE.writeln();
+			this.secretCombination.writeln();
 			boolean finished = false;
 			do {
-				int error;
-				do {
-					int[] codes = new ProposedCombination().read();
-					error = this.game.proposeCombination(codes);
-					if (error != Game.NO_ERROR) {
-						this.console.writeln(Error.values()[error].getMessage());
+				ProposedCombination proposedCombination = new ProposedCombination();
+				proposedCombination.read();
+				boolean added = false;
+				int i = 0;
+				while (!added && i < this.proposedCombinations.length) {
+					if (this.proposedCombinations[i] == null) {
+						this.proposedCombinations[i] = proposedCombination;
+						this.results[i] = this.secretCombination.getResult(proposedCombination);
+						added = true;
 					}
-				} while (error != Game.NO_ERROR);
-				this.console.writeln();
-				this.console.writeln(Message.TURN.getMessage().replaceFirst("#turn", "" + game.getTurn()));
-				this.game.getSecretCombination().writeln();
-				int[][][] allCodes = this.game.getCodes();
-				for (int i = 0; i < allCodes.length; i++) {
-					new ProposedCombination().write(allCodes[i][0]);
-					new Result(allCodes[i][1][0], allCodes[i][1][1]).writeln();
+					i++;
 				}
-				if (this.game.isWinner()) {
-					this.console.writeln(Message.WINNER.getMessage());
+				this.attempts++;
+				this.console.writeln();
+				Message.ATTEMPTS.writeln(this.attempts);
+				this.secretCombination.writeln();
+				for (i = 0; i < this.attempts; i++) {
+					this.proposedCombinations[i].write();
+					this.results[i].writeln();
+				}
+				if (this.results[this.attempts - 1].isWinner()) {
+					Message.WINNER.writeln();
 					finished = true;
-				} else if (this.game.isLooser()) {
-					this.console.writeln(Message.LOOSER.getMessage());
+				} else if (this.attempts == Mastermind.MAX_LONG) {
+					Message.LOOSER.writeln();
 					finished = true;
 				}
 			} while (!finished);
-			resume = new YesNoDialog().read(Message.RESUME.getMessage());
-			if (resume) {
-				this.game.clear();
+			Message.RESUME.write();
+			newGame = new YesNoDialog().read();
+			if (newGame) {
+				this.clear();
 			}
-		} while (resume);
+		} while (newGame);
 	}
 
 	public static void main(String[] args) {

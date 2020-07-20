@@ -1,5 +1,7 @@
 package usantatecla.mastermind;
 
+import usantatecla.utils.Console;
+
 enum Color {
 	RED('r'), 
 	BLUE('b'), 
@@ -22,6 +24,11 @@ enum Color {
 		return result;
 	}
 
+	static Color getInstance(int code) {
+		assert 0 <= code && code < Color.length();
+		return Color.values()[code];
+	}
+
 	static Color getInstance(char character) {
 		for (Color color : Color.values()) {
 			if (color.initial == character) {
@@ -30,18 +37,13 @@ enum Color {
 		}
 		return null;
 	}
-	
-	char getInitial() {
-		return this.initial;
-	}
-
-	static Color getInstance(int code) {
-		assert 0 <= code && code < Color.length();
-		return Color.values()[code];
-	}
 
 	static int length() {
 		return Color.values().length;
+	}
+
+	void write() {
+		new Console().write(this.initial);
 	}
 	
 }

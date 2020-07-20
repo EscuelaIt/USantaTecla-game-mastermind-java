@@ -1,25 +1,22 @@
 package usantatecla.mastermind;
 
-import java.util.Collections;
 import java.util.Random;
 
-public class SecretCombination extends Combination {
+class SecretCombination extends Combination {
 
-	public SecretCombination() {
-		for(Color color: Color.values()) {
-			this.colors.add(color);
+	SecretCombination() {
+		Random random;
+		for (int i = 0; i < this.colors.length; i++) {
+			random = new Random(System.currentTimeMillis());
+			this.colors[i] = Color.getInstance(random.nextInt(Color.length()));
 		}
-		Random random = new Random(System.currentTimeMillis());
-		for (int i = 0; i < Color.length() - Combination.getWidth(); i++) {
-			this.colors.remove(random.nextInt(this.colors.size()));
-		}
-		Collections.shuffle(this.colors);
+		this.shuffleArray(this.colors);
 	}
 
-	public Result getResult(ProposedCombination proposedCombination) {
+	Result getResult(ProposedCombination proposedCombination) {
 		int blacks = 0;
-		for (int i = 0; i < this.colors.size(); i++) {
-			if (proposedCombination.contains(this.colors.get(i), i)) {
+		for (int i = 0; i < this.colors.length; i++) {
+			if (proposedCombination.contains(this.colors[i], i)) {
 				blacks++;
 			}
 		}
@@ -31,12 +28,22 @@ public class SecretCombination extends Combination {
 		}
 		return new Result(blacks, whites - blacks);
 	}
-	
-	public void writeln () {
+
+	void writeln() {
 		for (int i = 0; i < Combination.getWidth(); i++) {
-			this.console.write(Message.SECRET.getMessage());
+			Message.SECRET.write();
 		}
 		this.console.writeln();
+	}
+
+	void shuffleArray(Color[] array) {
+		Random random = new Random(System.currentTimeMillis());
+		for (int i = array.length - 1; i > 0; i--) {
+			int index = random.nextInt(i + 1);
+			Color color = array[index];
+			array[index] = array[i];
+			array[i] = color;
+		}
 	}
 
 }
