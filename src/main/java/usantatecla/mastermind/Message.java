@@ -25,7 +25,7 @@ enum Message {
 	}
 
 	void writeln() {
-		
+
 		this.console.writeln(this.message);
 	}
 
