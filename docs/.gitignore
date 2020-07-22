@@ -52,7 +52,6 @@ crashlytics-build.properties
 fabric.properties
 ### Gradle template
 .gradle
-/build/
 
 # Ignore Gradle GUI config
 gradle-app.setting
@@ -65,8 +64,3 @@ gradle-app.setting
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
-
-/plane.iml
-/.idea/
-/src/docs/asciidoc/.asciidoctor/
-/src/docs/asciidoc/images/diag-*.png
