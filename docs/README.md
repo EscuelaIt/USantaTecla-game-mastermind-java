@@ -80,7 +80,7 @@
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
 <div class="content">
-<img src="images/Dibujo.jpg" alt="Dibujo">
+<img src="build/docs/asciidoc/images/Dibujo.jpg" alt="Dibujo">
 </div>
 </div></div></td>
 </tr>
@@ -102,7 +102,7 @@
 <h3 id="arquitectura">Arquitectura</h3>
 <div class="imageblock">
 <div class="content">
-<img src="images/arquitecturaVersion8.svg" alt="arquitecturaVersion8" width="932" height="650">
+<img src="build/docs/asciidoc/images/arquitecturaVersion8.svg" alt="arquitecturaVersion8" width="932" height="650">
 </div>
 </div>
 </div>
@@ -110,7 +110,7 @@
 <h3 id="paquete-mastermind">Paquete <em>mastermind</em></h3>
 <div class="imageblock">
 <div class="content">
-<img src="images/mastermindVersion8.svg" alt="mastermindVersion8" width="773" height="355">
+<img src="build/docs/asciidoc/images/mastermindVersion8.svg" alt="mastermindVersion8" width="773" height="355">
 </div>
 </div>
 </div>
@@ -118,7 +118,7 @@
 <h3 id="paquete-mastermind-views">Paquete <em>mastermind.views</em></h3>
 <div class="imageblock">
 <div class="content">
-<img src="images/mastermindViewsVersion8.svg" alt="mastermindViewsVersion8" width="916" height="440">
+<img src="build/docs/asciidoc/images/mastermindViewsVersion8.svg" alt="mastermindViewsVersion8" width="916" height="440">
 </div>
 </div>
 </div>
@@ -126,7 +126,7 @@
 <h3 id="paquete-mastermind-views-console">Paquete <em>mastermind.views.console</em></h3>
 <div class="imageblock">
 <div class="content">
-<img src="images/mastermindViewsConsoleVersion8.svg" alt="mastermindViewsConsoleVersion8" width="1371" height="656">
+<img src="build/docs/asciidoc/images/mastermindViewsConsoleVersion8.svg" alt="mastermindViewsConsoleVersion8" width="1371" height="656">
 </div>
 </div>
 </div>
@@ -134,7 +134,7 @@
 <h3 id="paquete-mastermind-views-graphics">Paquete <em>mastermind.views.graphics</em></h3>
 <div class="imageblock">
 <div class="content">
-<img src="images/mastermindViewsGraphicsVersion8.svg" alt="mastermindViewsGraphicsVersion8" width="1845" height="960">
+<img src="build/docs/asciidoc/images/mastermindViewsGraphicsVersion8.svg" alt="mastermindViewsGraphicsVersion8" width="1845" height="960">
 </div>
 </div>
 </div>
@@ -142,7 +142,7 @@
 <h3 id="paquete-mastermind-controllers">Paquete <em>mastermind.controllers</em></h3>
 <div class="imageblock">
 <div class="content">
-<img src="images/mastermindControllersVersion8.svg" alt="mastermindControllersVersion8" width="1026" height="751">
+<img src="build/docs/asciidoc/images/mastermindControllersVersion8.svg" alt="mastermindControllersVersion8" width="1026" height="751">
 </div>
 </div>
 </div>
@@ -150,7 +150,7 @@
 <h3 id="paquete-mastermind-models">Paquete <em>mastermind.models</em></h3>
 <div class="imageblock">
 <div class="content">
-<img src="images/mastermindModelsVersion8.svg" alt="mastermindModelsVersion8" width="682" height="930">
+<img src="build/docs/asciidoc/images/mastermindModelsVersion8.svg" alt="mastermindModelsVersion8" width="682" height="930">
 </div>
 </div>
 </div>
@@ -158,7 +158,7 @@
 <h3 id="paqute-mastermind-utils">Paqute <em>mastermind.utils</em></h3>
 <div class="imageblock">
 <div class="content">
-<img src="images/mastermindUtilsVersion8.svg" alt="mastermindUtilsVersion8" width="456" height="575">
+<img src="build/docs/asciidoc/images/mastermindUtilsVersion8.svg" alt="mastermindUtilsVersion8" width="456" height="575">
 </div>
 </div>
 </div>
@@ -184,7 +184,7 @@
 <div class="sectionbody">
 <div class="imageblock">
 <div class="content">
-<img src="images/diagramaImplementacion.svg" alt="diagramaImplementacion" width="1963" height="158">
+<img src="build/docs/asciidoc/images/diagramaImplementacion.svg" alt="diagramaImplementacion" width="1963" height="158">
 </div>
 </div>
 </div>
@@ -194,7 +194,7 @@
 <div class="sectionbody">
 <div class="imageblock">
 <div class="content">
-<img src="images/diagramaDespliegue.svg" alt="diagramaDespliegue" width="203" height="207">
+<img src="build/docs/asciidoc/images/diagramaDespliegue.svg" alt="diagramaDespliegue" width="203" height="207">
 </div>
 </div>
 </div>
@@ -218,39 +218,4 @@ Version 0.0.1<br>
 Last updated 2019-10-01 14:14:34 +0200
 </div>
 </div>
-<script>
-                let speed = 50;
-                
-                function typeWriter(v) {
-                  let i = v.getAttribute("typewriter-index")
-                  let txt = v.getAttribute("typewriter-original")
-                  
-                  if (i < txt.length) {
-                    v.getElementsByTagName("P")[0].innerHTML += txt.charAt(i);
-                    i++;
-                    v.setAttribute("typewriter-index", i)                        
-                  }else{
-                    if( ++i > txt.length+30 ){
-                        v.setAttribute("typewriter-index", 0)
-                        v.getElementsByTagName("P")[0].innerHTML = ''
-                    }
-                  }
-                }
-                
-                function typeWriterAll(){
-                    [].forEach.call(document.getElementsByClassName('typewriter'), function(v,i,a) {
-                        typeWriter(v)
-                    })
-                    setTimeout(typeWriterAll, speed);
-                }
-                                    
-                [].forEach.call(document.getElementsByClassName('typewriter'), function(v,i,a) {
-                    v.setAttribute("typewriter-original", v.innerText)
-                    v.setAttribute("typewriter-index", 0)
-                    v.getElementsByTagName("P")[0].innerHTML = ''
-                })
-                
-                setTimeout(typeWriterAll, speed);
-                
-                </script>
 </html>
