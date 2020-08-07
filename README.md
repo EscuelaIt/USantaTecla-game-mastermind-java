@@ -1,4 +1,4 @@
-<h1 align="center">Welcome to Master Mind. Solución 1.1. **domainModel** 👋</h1>
+<h1 align="center">Welcome to Master Mind. Solución 10.4.  **mvp.pm.-proxy** 👋</h1>
 <p>
   <a href="/docs" target="_blank">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
@@ -8,7 +8,7 @@
   </a>
 </p>
 
-> Master Mind. Solución Modelo de Dominio
+> Master Mind. Solución mvp.pm.-proxy
 
 ## Install
 
