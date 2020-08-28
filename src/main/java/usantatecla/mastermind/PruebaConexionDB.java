@@ -16,7 +16,7 @@ public class PruebaConexionDB {
 		}
 		Connection conexion = null;
 		try {
-			conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "rootroot");
+			conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
 			Statement stmt = conexion.createStatement();
 			String DB = "CREATE DATABASE IF NOT EXISTS `agencia_de_viajes_2`;\n";
 			stmt.executeUpdate(DB);
