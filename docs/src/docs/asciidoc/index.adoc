@@ -1,0 +1,588 @@
+= Mastermind. Solución 17.1. *mvp.sc*
+Santa Tecla <parqueNaturalSantaTecla@gmail.com>
+:toc-title: Índice
+:toc: left
+
+:idprefix:
+:idseparator: -
+:imagesdir: images
+
+== Requisitos 1. *Básica*
+
+[cols="50,50"]
+|===
+
+a|
+- link:https://en.wikipedia.org/wiki/Mastermind_(board_game)[*Wiki*] - link:https://www.youtube.com/watch?v=2-hTeg2M6GQ[*Youtube*]
+* _Funcionalidad: **Básica**_
+* _Interfaz: **Texto**_
+* _Distribución: **Standalone**_
+* _Persistencia: **No**_
+
+a|
+
+image::Dibujo.jpg[]
+
+|===
+
+== Vista de Lógica/Diseño
+
+=== Arquitectura
+
+- _Modelo/Vista/Presentador con_ [lime-background]*Controlador Supervisor_*
+
+[plantuml,arquitecturaVersion17,svg]
+....
+package mastermind #DDDDDD { } 
+mastermind .down.> mastermind.controllers
+mastermind .down.> mastermind.models
+
+package mastermind.controllers #DDDDDD { } 
+mastermind.controllers .down.> mastermind.models
+mastermind.controllers .down.> mastermind.views
+mastermind.controllers .down.> santaTecla.utils
+
+package mastermind.models #DDDDDD { } 
+mastermind.models .down.> mastermind.types
+
+package mastermind.types #DDDDDD { } 
+
+package santaTecla.utils #DDDDDD { } 
+package java.util{ }
+santaTecla.utils .down.> java.util
+package java.net{ }
+santaTecla.utils .down.> java.net
+package java.io{ }
+santaTecla.utils .down.> java.io
+
+package mastermind.views #DDDDDD { } 
+mastermind.views .down.> mastermind.models
+mastermind.views .down.> mastermind.types
+mastermind.views .down.> santaTecla.utils
+....
+
+=== Paquete _mastermind_
+
+[plantuml,mastermindVersion17,svg]
+....
+class mastermind.Mastermind {
+	-Session session
+	-Map<StateValue,Controller> controllers
+	-Mastermind()
+	-void play()
+	+{static}void main(String[] args)
+}
+mastermind.Mastermind *-down-> mastermind.controllers.Controller
+mastermind.Mastermind *-down-> mastermind.models.Session
+mastermind.Mastermind *-down-> mastermind.models.StateValue
+mastermind.Mastermind ..> mastermind.controllers.StartController
+mastermind.Mastermind ..> mastermind.controllers.PlayController
+mastermind.Mastermind ..> mastermind.controllers.ResumeController
+
+....
+
+=== Paquete _mastermind.controllers_
+
+[plantuml,mastermindControllersVersion17,svg]
+....
+abstract class mastermind.controllers.Controller {
+	#Session session
+	~Controller(Session session)
+	+{abstract}void control()
+}
+mastermind.controllers.Controller *-down-> mastermind.models.Session
+
+abstract class mastermind.controllers.InGameController {
+	-GameView gameView
+	~InGameController(Session session)
+	+void control()
+	#{abstract}void inGameControl()
+}
+mastermind.controllers.Controller <|-down- mastermind.controllers.InGameController
+mastermind.controllers.InGameController *-down-> mastermind.views.GameView
+
+class mastermind.controllers.PlayController {
+	-Map<Command,Controller> controllers
+	-ProposeCommand proposeCommand
+	-ProposalController proposalController
+	-UndoCommand undoCommand
+	-UndoController undoController
+	-RedoCommand redoCommand
+	-RedoController redoController
+	-Menu menu
+	+PlayController(Session session)
+	+void control()
+}
+mastermind.controllers.Controller <|-down- mastermind.controllers.PlayController
+mastermind.controllers.PlayController *-down-> santaTecla.utils.Command
+mastermind.controllers.PlayController *-down-> mastermind.controllers.Controller
+mastermind.controllers.PlayController *-down-> mastermind.controllers.ProposalController
+mastermind.controllers.PlayController *-down-> mastermind.controllers.UndoController
+mastermind.controllers.PlayController *-down-> mastermind.controllers.RedoController
+mastermind.controllers.PlayController *-down-> mastermind.views.ProposeCommand
+mastermind.controllers.PlayController *-down-> mastermind.views.UndoCommand
+mastermind.controllers.PlayController *-down-> mastermind.views.RedoCommand
+mastermind.controllers.PlayController *-down-> santaTecla.utils.Menu
+
+class mastermind.controllers.ProposalController {
+	~ProposalController(Session session)
+	+void inGameControl()
+}
+mastermind.controllers.InGameController <|-down- mastermind.controllers.ProposalController
+mastermind.controllers.ProposalController ..> mastermind.models.ProposedCombination
+mastermind.controllers.ProposalController ..> mastermind.views.ProposedCombinationView
+
+class mastermind.controllers.RedoController {
+	~RedoController(Session session)
+	+void inGameControl()
+}
+mastermind.controllers.InGameController <|-down- mastermind.controllers.RedoController
+
+class mastermind.controllers.ResumeController {
+	+ResumeController(Session session)
+	+void control()
+}
+mastermind.controllers.Controller <|-down- mastermind.controllers.ResumeController
+
+class mastermind.controllers.StartController {
+	+StartController(Session session)
+	+void control()
+}
+mastermind.controllers.Controller <|-down- mastermind.controllers.StartController
+
+class mastermind.controllers.UndoController {
+	~UndoController(Session session)
+	+void inGameControl()
+}
+mastermind.controllers.InGameController <|-down- mastermind.controllers.UndoController
+
+....
+
+=== Paquete _mastermind.views_
+
+[plantuml,mastermindViewsVersion17,svg]
+....
+class mastermind.views.AttemptsView {
+	-Game game
+	~AttemptsView(Game game)
+	~void writeln()
+}
+mastermind.views.AttemptsView *-down-> mastermind.models.Game
+mastermind.views.AttemptsView ..> mastermind.views.MessageView
+
+class mastermind.views.ColorView {
+	~{static}char[] INITIALS
+	#Color color
+	~ColorView(Color color)
+	~{static}String allInitials()
+	~char getInitial()
+	~{static}Color getInstance(char character)
+	~void write()
+}
+santaTecla.utils.WithConsoleView <|-down- mastermind.views.ColorView
+mastermind.views.ColorView *-down-> mastermind.types.Color
+
+abstract class mastermind.views.Command {
+	#Session session
+	#Command(String title, Session session)
+	+{abstract}void updateIsActive()
+}
+santaTecla.utils.Command <|-down- mastermind.views.Command
+mastermind.views.Command *-down-> mastermind.models.Session
+
+class mastermind.views.ErrorView {
+	~{static}String[] MESSAGES
+	-Error error
+	~ErrorView(Error error)
+	~void writeln()
+}
+santaTecla.utils.WithConsoleView <|-down- mastermind.views.ErrorView
+mastermind.views.ErrorView *-down-> mastermind.types.Error
+mastermind.views.ErrorView ..> mastermind.views.ColorView
+
+class mastermind.views.GameView {
+	-Game game
+	+GameView(Game game)
+	+void writeGame()
+	+void writeLooser()
+	+void writeWinner()
+}
+mastermind.views.GameView *-down-> mastermind.models.Game
+mastermind.views.GameView ..> mastermind.views.MessageView
+mastermind.views.GameView ..> mastermind.views.AttemptsView
+mastermind.views.GameView ..> mastermind.views.SecretCombinationView
+mastermind.views.GameView ..> mastermind.views.ProposedCombinationView
+mastermind.views.GameView ..> mastermind.views.ResultView
+
+enum mastermind.views.MessageView {
+	ATTEMPTS
+	SECRET
+	RESUME
+	RESULT
+	PROPOSED_COMBINATION
+	TITLE
+	WINNER
+	LOOSER
+	PROPOSE_COMMAND
+	UNDO_COMMAND
+	REDO_COMMAND
+	NEW_LINE
+	message
+	console
+	-MessageView(String message)
+	~String getMessage()
+	~void write()
+	~void writeln()
+	~void writeln(int attempts)
+	~void writeln(int blacks, int whites)
+}
+mastermind.views.MessageView *-down-> santaTecla.utils.Console
+
+class mastermind.views.ProposeCommand {
+	+ProposeCommand(Session session)
+	+void updateIsActive()
+}
+mastermind.views.Command <|-down- mastermind.views.ProposeCommand
+mastermind.views.ProposeCommand ..> mastermind.views.MessageView
+
+class mastermind.views.ProposedCombinationView {
+	-ProposedCombination proposedCombination
+	+ProposedCombinationView(ProposedCombination proposedCombination)
+	~void write()
+	+void read()
+}
+santaTecla.utils.WithConsoleView <|-down- mastermind.views.ProposedCombinationView
+mastermind.views.ProposedCombinationView *-down-> mastermind.models.ProposedCombination
+mastermind.views.ProposedCombinationView ..> mastermind.types.Color
+mastermind.views.ProposedCombinationView ..> mastermind.views.ColorView
+mastermind.views.ProposedCombinationView ..> mastermind.types.Error
+mastermind.views.ProposedCombinationView ..> mastermind.views.ErrorView
+mastermind.views.ProposedCombinationView ..> mastermind.views.MessageView
+
+class mastermind.views.RedoCommand {
+	+RedoCommand(Session session)
+	+void updateIsActive()
+}
+mastermind.views.Command <|-down- mastermind.views.RedoCommand
+mastermind.views.RedoCommand ..> mastermind.views.MessageView
+
+class mastermind.views.ResultView {
+	-Result result
+	~ResultView(Result result)
+	~void writeln()
+}
+mastermind.views.ResultView *-down-> mastermind.models.Result
+mastermind.views.ResultView ..> mastermind.views.MessageView
+
+class mastermind.views.ResumeView {
+	+Boolean write()
+}
+mastermind.views.ResumeView ..> santaTecla.YesNoDialog
+mastermind.views.ResumeView ..> mastermind.views.MessageView
+
+class mastermind.views.SecretCombinationView {
+	-SecretCombination secretCombination
+	~SecretCombinationView(SecretCombination secretCombination)
+	~void writeln()
+}
+mastermind.views.SecretCombinationView *-down-> mastermind.models.SecretCombination
+mastermind.views.SecretCombinationView ..> mastermind.views.MessageView
+
+class mastermind.views.StartView {
+	-Game game
+	+StartView(Game game)
+	+void write()
+}
+mastermind.views.StartView *-down-> mastermind.models.Game
+mastermind.views.StartView ..> mastermind.views.MessageView
+mastermind.views.StartView ..> mastermind.views.SecretCombinationView
+
+class mastermind.views.UndoCommand {
+	+UndoCommand(Session session)
+	+void updateIsActive()
+}
+mastermind.views.Command <|-down- mastermind.views.UndoCommand
+mastermind.views.UndoCommand ..> mastermind.views.MessageView
+
+....
+
+=== Paquete _mastermind.models_
+
+[plantuml,mastermindModelsVersion17,svg]
+....
+abstract class mastermind.models.Combination {
+	-{static}int WIDTH
+	#List<Color> colors
+	#Combination()
+	~{static}int getWidth()
+	+List<Color> getColors()
+}
+mastermind.models.Combination *-down-> mastermind.types.Color
+
+class mastermind.models.Game {
+	-{static}int MAX_LONG
+	-SecretCombination secretCombination
+	-List<ProposedCombination> proposedCombinations
+	-List<Result> results
+	-int attempts
+	~Game()
+	~void clear()
+	~void addProposedCombination(ProposedCombination proposedCombination)
+	~Memento createMemento()
+	~void set(Memento memento)
+	~boolean isLooser()
+	~boolean isWinner()
+	+SecretCombination getSecretCombination()
+	+ProposedCombination getProposedCombination(int position)
+	+Result getResultCombination(int position)
+	+int getAttempts()
+}
+mastermind.models.Game *-down-> mastermind.models.SecretCombination
+mastermind.models.Game *-down-> mastermind.models.ProposedCombination
+mastermind.models.Game *-down-> mastermind.models.Result
+mastermind.models.Game ..> mastermind.models.Memento
+
+class mastermind.models.Memento {
+	-List<ProposedCombination> proposedCombinations
+	-List<Result> results
+	-int attempts
+	~Memento(int attempts)
+	~void set(ProposedCombination proposedCombination, Result result)
+	~ProposedCombination getProposedCombination(int position)
+	~Result getResult(int position)
+	~int getSize()
+	~int getAttempts()
+}
+mastermind.models.Memento *-down-> mastermind.models.ProposedCombination
+mastermind.models.Memento *-down-> mastermind.models.Result
+
+class mastermind.models.ProposedCombination {
+	+{static}Error isValid(List<Color> colors)
+	+void set(List<Color> colors)
+	~boolean contains(Color color, int position)
+	~boolean contains(Color color)
+	~ProposedCombination copy()
+}
+mastermind.models.Combination <|-down- mastermind.models.ProposedCombination
+mastermind.models.ProposedCombination ..> mastermind.types.Error
+
+class mastermind.models.Registry {
+	-ArrayList<Memento> mementoList
+	-Game game
+	-int firstPrevious
+	~Registry(Game game)
+	~void registry()
+	~void undo(Game game)
+	~void redo(Game game)
+	~boolean undoable()
+	~boolean redoable()
+	~void reset()
+}
+mastermind.models.Registry *-down-> mastermind.models.Memento
+mastermind.models.Registry *-down-> mastermind.models.Game
+
+class mastermind.models.Result {
+	-int blacks
+	-int whites
+	~Result(int blacks, int whites)
+	~boolean isWinner()
+	+int getBlacks()
+	+int getWhites()
+	~Result copy()
+}
+mastermind.models.Result ..> mastermind.models.Combination
+
+class mastermind.models.SecretCombination {
+	~SecretCombination()
+	~Result getResult(ProposedCombination proposedCombination)
+}
+mastermind.models.Combination <|-down- mastermind.models.SecretCombination
+mastermind.models.SecretCombination ..> mastermind.models.ProposedCombination
+mastermind.models.SecretCombination ..> mastermind.models.Result
+
+class mastermind.models.Session {
+	-State state
+	-Game game
+	-Registry registry
+	+Session()
+	+void next()
+	+void addProposedCombination(ProposedCombination proposedCombination)
+	+boolean undoable()
+	+boolean redoable()
+	+void undo()
+	+void redo()
+	+void clearGame()
+	+boolean isWinner()
+	+boolean isLooser()
+	+StateValue getValueState()
+	+Game getGame()
+}
+mastermind.models.Session *-down-> mastermind.models.Game
+mastermind.models.Session *-down-> mastermind.models.State
+mastermind.models.Session *-down-> mastermind.models.Registry
+mastermind.models.Session ..> mastermind.models.ProposedCombination
+
+class mastermind.models.State {
+	-StateValue stateValue
+	~State()
+	~void next()
+	~void reset()
+	~StateValue getValueState()
+}
+mastermind.models.State *-down-> mastermind.models.StateValue
+
+enum mastermind.models.StateValue {
+	INITIAL
+	IN_GAME
+	FINAL
+	EXIT
+}
+....
+
+=== Paquete _mastermind.types_
+
+[plantuml, types, svg]
+....
+enum mastermind.types.Color {
+	RED
+	BLUE
+	YELLOW
+	GREEN
+	ORANGE
+	PURPLE
+	+{static}int length()
+}
+
+enum mastermind.types.Error {
+	DUPLICATED
+	WRONG_CHARACTERS
+	WRONG_LENGTH
+}
+....
+
+=== Paquete _santaTecla.utils_
+
+[plantuml,mastermindUtilsVersion17,svg]
+....
+class santaTecla.utils.ClosedInterval {
+	-int min
+	-int max
+	+ClosedInterval(int min, int max)
+	+boolean includes(int value)
+}
+
+abstract class santaTecla.utils.Command {
+	#String title
+	#boolean isActive
+	#Command(String title)
+	+{abstract}void updateIsActive()
+	#boolean isActive()
+	~String getTitle()
+}
+santaTecla.utils.WithConsoleView <|-down- santaTecla.utils.Command
+
+class santaTecla.utils.Console {
+	-BufferedReader bufferedReader
+	+String readString(String title)
+	+int readInt(String title)
+	+char readChar(String title)
+	+void writeln()
+	+void write(String string)
+	+void writeln(String string)
+	+void write(char character)
+	+void writeln(int integer)
+	-void writeError(String format)
+}
+
+class santaTecla.utils.Menu {
+	-{static}String OPTION
+	-ArrayList<Command> commandSet
+	+Menu(Set<Command> commandSet)
+	+Command execute()
+}
+santaTecla.utils.WithConsoleView <|-down- santaTecla.utils.Menu
+santaTecla.utils.Menu *-down-> santaTecla.utils.Command
+
+abstract class santaTecla.utils.WithConsoleView {
+	#Console console
+	#WithConsoleView()
+}
+santaTecla.utils.WithConsoleView *-down-> santaTecla.utils.Console
+
+class santaTecla.utils.YesNoDialog {
+	-{static}char AFIRMATIVE
+	-{static}char NEGATIVE
+	-{static}String QUESTION
+	-{static}String MESSAGE
+	+boolean read(String title)
+	-{static}boolean isAfirmative(char answer)
+	-{static}boolean isNegative(char answer)
+}
+santaTecla.utils.WithConsoleView <|-down- santaTecla.utils.YesNoDialog
+
+....
+
+== Vista de Desarrollo/Implementación
+
+[plantuml,diagramaImplementacion,svg]
+....
+
+package "  "  as mastermind {
+}
+package "  "  as mastermind.controllers {
+}
+package "  "  as mastermind.models {
+}
+package "  "  as mastermind.views {
+}
+package "  "  as santaTecla.utils {
+}
+package "  "  as java.io {
+}
+package "  "  as java.util {
+}
+
+[mastermind.jar] as jar
+
+jar *--> mastermind
+jar *--> mastermind.controllers
+jar *--> mastermind.models
+jar *--> mastermind.views
+jar *--> mastermind.views.console
+jar *--> mastermind.views.graphics
+jar *--> mastermind.utils
+jar *--> java.io
+jar *--> java.util
+jar *--> java.awt
+jar *--> java.awt.event
+jar *--> javax.swing
+
+....
+
+
+== Vista de Despliegue/Física
+
+[plantuml,diagramaDespliegue,svg]
+....
+
+node node #DDDDDD [
+<b>Personal Computer</b>
+----
+memory : xxx Mb
+cpu : xxx GHz
+]
+
+[ masterming.jar ] as component
+
+node *--> component
+....
+
+== Vista de Procesos
+
+- No hay concurrencia
+
+
+
+
+
+

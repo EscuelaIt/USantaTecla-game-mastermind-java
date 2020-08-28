@@ -1,13 +1,41 @@
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\mastermind\ProposedCombination.java
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\mastermind\Result.java
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\mastermind\Color.java
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\utils\YesNoDialog.java
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\mastermind\Combination.java
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\mastermind\SecretCombination.java
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\utils\ClosedInterval.java
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\mastermind\Error.java
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\mastermind\Mastermind.java
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\mastermind\Message.java
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\utils\Console.java
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\utils\WithConsoleModel.java
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\mastermind\Game.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\controllers\ProposalController.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\StartView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\ProposedCombinationView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\controllers\RedoController.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\utils\Command.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\models\ProposedCombination.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\ErrorView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\controllers\UndoController.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\models\Memento.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\RedoCommand.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\UndoCommand.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\models\SecretCombination.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\ColorView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\utils\Console.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\controllers\InGameController.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\Command.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\controllers\PlayController.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\utils\ClosedInterval.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\utils\Menu.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\controllers\ResumeController.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\types\Error.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\controllers\Controller.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\AttemptsView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\controllers\StartController.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\utils\YesNoDialog.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\utils\WithConsoleView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\ProposeCommand.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\ResumeView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\models\Registry.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\Mastermind.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\ResultView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\MessageView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\models\Game.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\models\Combination.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\models\Result.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\models\Session.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\SecretCombinationView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\GameView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\types\Color.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\models\State.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\models\StateValue.java
