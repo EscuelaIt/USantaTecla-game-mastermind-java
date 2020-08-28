@@ -80,5 +80,9 @@ public class Session {
 	public StateValue getValueState() {
 		return this.state.getValueState();
 	}
+
+	public List<Color> getSecretCombination (){
+		return this.game.getSecretCombination();
+	}
 	
 }
