@@ -1,0 +1,1640 @@
+= Mastermind. Solución 14.6. *mvp.pm.-prototype*
+Santa Tecla <parqueNaturalSantaTecla@gmail.com>
+:toc-title: Índice
+:toc: left
+
+:idprefix:
+:idseparator: -
+:imagesdir: images
+
+
+== Requisitos 6. *Bases de Datos*
+
+[cols="50,50"]
+|===
+
+a|
+- link:https://en.wikipedia.org/wiki/Mastermind_(board_game)[*Wiki*] - link:https://www.youtube.com/watch?v=2-hTeg2M6GQ[*Youtube*]
+* _Funcionalidad: **Básica** + **undo/redo**_
+* _Interfaz: [line-through]*Gráfica* y **Texto**_
+* _Distribución: **Standalone** + **Client/Server**_
+* _Persistencia: **Ficheros** + [lime-background]#**Bases de Datos**#_
+
+a|
+
+image::Dibujo.jpg[]
+
+|===
+
+== Vista de Lógica/Diseño
+
+- *Modelo/Vista/Presentador* con *Presentador del Modelo* con *Vista Achicada*
+
+=== Arquitectura
+
+[plantuml, arquitectura, svg]
+....
+package mastermind #DDDDDD { } 
+mastermind .down.> mastermind.views
+mastermind .down.> mastermind.controllers
+mastermind .down.> mastermind.controllers.implementation
+mastermind .down.> mastermind.models.DAO
+mastermind .down.> mastermind.models.dataBase
+mastermind .down.> mastermind.models.Files
+
+package mastermind.controllers #DDDDDD { } 
+package java.util{ }
+mastermind.controllers .down.> java.util
+mastermind.controllers .down.> mastermind.models
+mastermind.controllers .down.> mastermind.types
+
+package mastermind.controllers.implementation #DDDDDD { } 
+mastermind.controllers.implementation .down.> mastermind.controllers
+mastermind.controllers.implementation .down.> mastermind.models
+mastermind.controllers.implementation .down.> mastermind.models.DAO
+mastermind.controllers.implementation .down.> mastermind.types
+
+package mastermind.distributed #DDDDDD { } 
+mastermind.distributed .down.> mastermind.controllers
+mastermind.distributed .down.> mastermind
+mastermind.distributed .down.> mastermind.distributed.dispatchers
+mastermind.distributed .down.> mastermind.controllers.implementation
+mastermind.distributed .down.> mastermind.models
+mastermind.distributed .down.> santaTecla.utils
+mastermind.distributed .down.> mastermind.types
+mastermind.distributed .down.> mastermind.models.DAO
+mastermind.distributed .down.> mastermind.models.dataBase
+mastermind.distributed .down.> mastermind.models.Files
+
+package mastermind.distributed.dispatchers #DDDDDD { } 
+package java.util{ }
+mastermind.distributed.dispatchers .down.> java.util
+mastermind.distributed.dispatchers .down.> mastermind.controllers
+mastermind.distributed.dispatchers .down.> mastermind.controllers.implementation
+mastermind.distributed.dispatchers .down.> santaTecla.utils
+mastermind.distributed.dispatchers .down.> mastermind.types
+
+package mastermind.models #DDDDDD { } 
+package java.util{ }
+mastermind.models .down.> java.util
+mastermind.models .down.> mastermind.types
+
+package mastermind.models.DAO #DDDDDD { } 
+package java.io{ }
+mastermind.models.DAO .down.> java.io
+mastermind.models.DAO .down.> mastermind.models
+
+package mastermind.models.dataBase #DDDDDD { } 
+mastermind.models.dataBase .down.> mastermind.models
+mastermind.models.dataBase .down.> mastermind.models.DAO
+mastermind.models.dataBase .down.> mastermind.types
+
+package mastermind.models.Files #DDDDDD { } 
+mastermind.models.Files .down.> mastermind.models
+mastermind.models.Files .down.> mastermind.models.DAO
+mastermind.models.Files .down.> mastermind.types
+
+package mastermind.types #DDDDDD { } 
+
+package santaTecla.utils #DDDDDD { } 
+package java.util{ }
+santaTecla.utils .down.> java.util
+package java.net{ }
+santaTecla.utils .down.> java.net
+package java.io{ }
+santaTecla.utils .down.> java.io
+
+package mastermind.views #DDDDDD { } 
+mastermind.views .down.> mastermind.controllers
+mastermind.views .down.> santaTecla.utils
+mastermind.views .down.> mastermind.views.menus
+mastermind.views .down.> mastermind.views.models
+
+package mastermind.views.menus #DDDDDD { } 
+mastermind.views.menus .down.> mastermind.controllers
+mastermind.views.menus .down.> santaTecla.utils
+mastermind.views.menus .down.> mastermind.types
+mastermind.views.menus .down.> mastermind.views.models
+
+package mastermind.views.models #DDDDDD { } 
+mastermind.views.models .down.> mastermind.controllers
+mastermind.views.models .down.> mastermind.types
+mastermind.views.models .down.> santaTecla.utils
+
+....
+
+=== Paquete _mastermind.distributed_
+
+[plantuml, mastermindDistributed, svg]
+....
+class mastermind.distributed.LogicImplementationServer {
+	+LogicImplementationServer(SessionImplementationDAO sessionImplementationDAO)
+	+void createDispatchers(DispatcherPrototype dispatcherPrototype)
+}
+mastermind.controllers.implementation.LogicImplementation <|-down- mastermind.distributed.LogicImplementationServer
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.DispatcherPrototype
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.ColorsDispatcher
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.ExistsDispatcher
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.FrameType
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.GetTitleDispatcher
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.HasNameDispatcher
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.LooserDispatcher
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.NextDispatcher
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.ProposeCombinationDispatcher
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.RedoDispatcher
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.RedoableDispatcher
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.ResumeDispatcher
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.SaveDispatcher
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.SaveNamedDispatcher
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.SetTitleDispatcher
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.StartDispatcher
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.StartNameDispatcher
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.StateDispatcher
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.TitlesDispatcher
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.AttemptsDispatcher
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.BlacksDispatcher
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.UndoDispatcher
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.UndoableDispatcher
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.WhitesDispatcher
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.WidthDispatcher
+mastermind.distributed.LogicImplementationServer ..> mastermind.distributed.dispatchers.WinnerDispatcher
+
+class mastermind.distributed.LogicProxy {
+	-TCPIP tcpip
+	+LogicProxy()
+	+void close()
+}
+mastermind.controllers.Logic <|-down- mastermind.distributed.LogicProxy
+mastermind.distributed.LogicProxy *-down-> mastermind.distributed.dispatchers.TCPIP
+mastermind.distributed.LogicProxy ..> mastermind.distributed.SessionProxy
+
+class mastermind.distributed.MastermindClient {
+	-LogicProxy logicProxy
+	#Logic createLogic()
+	#void play()
+	+{static}void main(String[] args)
+}
+mastermind.Mastermind <|-down- mastermind.distributed.MastermindClient
+mastermind.distributed.MastermindClient *-down-> mastermind.distributed.LogicProxy
+
+abstract class mastermind.distributed.MastermindServer {
+	-DispatcherPrototype dispatcherPrototype
+	-LogicImplementationServer logic
+	#MastermindServer()
+	#void serve()
+	#{abstract}SessionImplementationDAO createDAO()
+}
+mastermind.distributed.MastermindServer *-down-> mastermind.distributed.dispatchers.DispatcherPrototype
+mastermind.distributed.MastermindServer *-down-> mastermind.distributed.LogicImplementationServer
+mastermind.distributed.MastermindServer ..> mastermind.models.DAO.SessionImplementationDAO
+
+class mastermind.distributed.MastermindServerDB {
+	#SessionImplementationDAO createDAO()
+	+{static}void main(String[] args)
+}
+mastermind.distributed.MastermindServer <|-down- mastermind.distributed.MastermindServerDB
+mastermind.distributed.MastermindServerDB ..> mastermind.models.dataBase.SessionImplementationDBDAO
+
+class mastermind.distributed.MastermindServerFile {
+	#SessionImplementationDAO createDAO()
+	+{static}void main(String[] args)
+}
+mastermind.distributed.MastermindServer <|-down- mastermind.distributed.MastermindServerFile
+mastermind.distributed.MastermindServerFile ..> mastermind.models.Files.SessionImplementationFileDAO
+
+class mastermind.distributed.PlayControllerProxy {
+	-TCPIP tcpip
+	~PlayControllerProxy(Session session, TCPIP tcpip)
+	+Error addProposedCombination(List<Color> colors)
+	+void undo()
+	+void redo()
+	+void next()
+	+boolean undoable()
+	+boolean redoable()
+	+boolean isWinner()
+	+boolean isLooser()
+	+List<Color> getColors(int position)
+	+int getAttempts()
+	+int getBlacks(int position)
+	+int getWhites(int position)
+}
+mastermind.controllers.PlayController <|-down- mastermind.distributed.PlayControllerProxy
+mastermind.distributed.PlayControllerProxy ..> mastermind.distributed.dispatchers.FrameType
+mastermind.distributed.PlayControllerProxy *-down-> mastermind.distributed.dispatchers.TCPIP
+
+class mastermind.distributed.ResumeControllerProxy {
+	-TCPIP tcpip
+	~ResumeControllerProxy(Session session, TCPIP tcpip)
+	+void isNewGame(boolean newGame)
+}
+mastermind.controllers.ResumeController <|-down- mastermind.distributed.ResumeControllerProxy
+mastermind.distributed.ResumeControllerProxy ..> mastermind.distributed.dispatchers.FrameType
+mastermind.distributed.ResumeControllerProxy *-down-> mastermind.distributed.dispatchers.TCPIP
+
+class mastermind.distributed.SaveControllerProxy {
+	-TCPIP tcpip
+	~SaveControllerProxy(Session session, TCPIP tcpip)
+	+void save(String name)
+	+void save()
+	+void next()
+	+boolean hasName()
+	+boolean exists(String name)
+}
+mastermind.controllers.SaveController <|-down- mastermind.distributed.SaveControllerProxy
+mastermind.distributed.SaveControllerProxy ..> mastermind.distributed.dispatchers.FrameType
+mastermind.distributed.SaveControllerProxy *-down-> mastermind.distributed.dispatchers.TCPIP
+
+class mastermind.distributed.SessionProxy {
+	-TCPIP tcpip
+	~SessionProxy(TCPIP tcpip)
+	+void setName(String title)
+	+StateValue getValueState()
+	+int getWidth()
+	+String getName()
+}
+mastermind.models.Session <|.down. mastermind.distributed.SessionProxy
+mastermind.distributed.SessionProxy ..> mastermind.distributed.dispatchers.FrameType
+mastermind.distributed.SessionProxy *-down-> mastermind.distributed.dispatchers.TCPIP
+
+class mastermind.distributed.StartControllerProxy {
+	-TCPIP tcpip
+	~StartControllerProxy(Session session, TCPIP tcpip)
+	+void start()
+	+void start(String title)
+	+String[] getGamesNames()
+	+int getAttempts()
+	+boolean isWinner()
+	+boolean isLooser()
+	+List<Color> getColors(int position)
+	+int getBlacks(int position)
+	+int getWhites(int position)
+}
+mastermind.controllers.StartController <|-down- mastermind.distributed.StartControllerProxy
+mastermind.distributed.StartControllerProxy ..> mastermind.distributed.dispatchers.FrameType
+mastermind.distributed.StartControllerProxy *-down-> mastermind.distributed.dispatchers.TCPIP
+....
+
+=== Paquete _mastermind_
+
+[plantuml, mastermind, svg]
+....
+abstract class mastermind.Mastermind {
+	-Logic logic
+	-View view
+	#Mastermind()
+	#{abstract}Logic createLogic()
+	#void play()
+}
+mastermind.Mastermind *-down-> mastermind.controllers.Logic
+mastermind.Mastermind *-down-> mastermind.views.View
+mastermind.Mastermind ..> mastermind.controllers.AcceptorController
+
+abstract class mastermind.MastermindStandalone {
+	#Logic createLogic()
+	#{abstract}SessionImplementationDAO createDAO()
+}
+mastermind.Mastermind <|-down- mastermind.MastermindStandalone
+mastermind.MastermindStandalone ..> mastermind.controllers.implementation.LogicImplementation
+mastermind.MastermindStandalone ..> mastermind.models.DAO.SessionImplementationDAO
+
+class mastermind.MastermindStandaloneDB {
+	#SessionImplementationDAO createDAO()
+	+{static}void main(String[] args)
+}
+mastermind.MastermindStandalone <|-- mastermind.MastermindStandaloneDB
+
+class mastermind.MastermindStandaloneFile {
+	#SessionImplementationDAO createDAO()
+	+{static}void main(String[] args)
+}
+mastermind.MastermindStandalone <|-- mastermind.MastermindStandaloneFile
+....
+
+=== Paquete _mastermind.controllers_
+
+[plantuml, mastermindControllers, svg]
+....
+abstract class mastermind.controllers.AcceptorController {
+	~AcceptorController(Session session)
+	+{abstract}void accept(ControllersVisitor controllersVisitor)
+}
+mastermind.controllers.Controller <|-down- mastermind.controllers.AcceptorController
+mastermind.controllers.AcceptorController ..> mastermind.controllers.ControllersVisitor
+
+abstract class mastermind.controllers.Controller {
+	#Session session
+	~Controller(Session session)
+	+void setName(String name)
+	+int getWidth()
+	+StateValue getValueState()
+	+String getName()
+}
+mastermind.controllers.Controller *-down-> mastermind.models.Session
+mastermind.controllers.Controller ..> mastermind.models.StateValue
+
+interface mastermind.controllers.ControllersVisitor {
+	void visit(StartController startController)
+	void visit(PlayController playController)
+	void visit(SaveController saveController)
+	void visit(ResumeController resumeController)
+}
+mastermind.controllers.ControllersVisitor ..> mastermind.controllers.StartController
+mastermind.controllers.ControllersVisitor ..> mastermind.controllers.PlayController
+mastermind.controllers.ControllersVisitor ..> mastermind.controllers.SaveController
+mastermind.controllers.ControllersVisitor ..> mastermind.controllers.ResumeController
+
+class mastermind.controllers.ExitController {
+	+ExitController(Session session)
+	+void next()
+}
+mastermind.controllers.ExitController ..> mastermind.models.SessionImplementation
+
+abstract class mastermind.controllers.GameController {
+	~GameController(Session session)
+	+{abstract}int getAttempts()
+	+{abstract}List<Color> getColors(int position)
+	+{abstract}int getBlacks(int position)
+	+{abstract}int getWhites(int position)
+	+{abstract}boolean isWinner()
+	+{abstract}boolean isLooser()
+	+{abstract}void accept(ControllersVisitor controllersVisitor)
+}
+mastermind.controllers.AcceptorController <|-down- mastermind.controllers.GameController
+mastermind.controllers.GameController ..> mastermind.types.Color
+
+class mastermind.controllers.Logic {
+	#Session session
+	#Map<StateValue,AcceptorController> acceptorControllers
+	#Logic()
+	+AcceptorController getController()
+}
+mastermind.controllers.Logic *-down-> mastermind.models.Session
+mastermind.controllers.Logic *-down-> mastermind.controllers.AcceptorController
+mastermind.controllers.Logic *-down-> mastermind.models.StateValue
+
+abstract class mastermind.controllers.PlayController {
+	#PlayController(Session session)
+	+{abstract}Error addProposedCombination(List<Color> colors)
+	+{abstract}void undo()
+	+{abstract}void redo()
+	+{abstract}void next()
+	+{abstract}boolean undoable()
+	+{abstract}boolean redoable()
+	+{abstract}List<Color> getColors(int position)
+	+{abstract}int getBlacks(int position)
+	+{abstract}int getWhites(int position)
+	+{abstract}int getAttempts()
+	+void accept(ControllersVisitor controllersVisitor)
+}
+mastermind.controllers.GameController <|-down- mastermind.controllers.PlayController
+mastermind.controllers.PlayController ..> mastermind.types.Error
+
+class mastermind.controllers.ProposalController {
+	+ProposalController(Session session)
+	+Error addProposedCombination(List<Color> colors)
+	+boolean isWinner()
+	+boolean isLooser()
+	+int getAttempts()
+	+List<Color> getColors(int position)
+	+int getBlacks(int position)
+	+int getWhites(int position)
+}
+mastermind.controllers.Controller <|-down- mastermind.controllers.ProposalController
+mastermind.controllers.ProposalController ..> mastermind.types.Error
+mastermind.controllers.ProposalController ..> mastermind.types.Color
+mastermind.controllers.ProposalController ..> mastermind.models.SessionImplementation
+mastermind.controllers.ProposalController ..> mastermind.models.Combination
+
+class mastermind.controllers.RedoController {
+	+RedoController(Session session)
+	+void redo()
+	+boolean redoable()
+}
+mastermind.controllers.Controller <|-down- mastermind.controllers.RedoController
+mastermind.controllers.RedoController ..> mastermind.models.SessionImplementation
+
+abstract class mastermind.controllers.ResumeController {
+	+ResumeController(Session session)
+	+{abstract}void isNewGame(boolean newGame)
+	+void accept(ControllersVisitor controllersVisitor)
+}
+mastermind.controllers.AcceptorController <|-down- mastermind.controllers.ResumeController
+
+abstract class mastermind.controllers.SaveController {
+	+SaveController(Session session)
+	+{abstract}void save(String name)
+	+{abstract}void save()
+	+{abstract}void next()
+	+{abstract}boolean hasName()
+	+{abstract}boolean exists(String readString)
+	+void accept(ControllersVisitor controllersVisitor)
+}
+mastermind.controllers.AcceptorController <|-down- mastermind.controllers.SaveController
+
+abstract class mastermind.controllers.StartController {
+	+StartController(Session session)
+	+{abstract}void start()
+	+{abstract}void start(String title)
+	+{abstract}String[] getGamesNames()
+	+void accept(ControllersVisitor controllersVisitor)
+}
+mastermind.controllers.GameController <|-down- mastermind.controllers.StartController
+
+class mastermind.controllers.UndoController {
+	+UndoController(Session session)
+	+void undo()
+	+boolean undoable()
+}
+mastermind.controllers.Controller <|-down- mastermind.controllers.UndoController
+....
+
+=== Paquete _mastermind.controllers.implementation_
+
+[plantuml, mastermindControllersImplementation, svg]
+....
+
+class mastermind.controllers.implementation.LogicImplementation {
+	#SessionImplementationDAO sessionImplementationDAO
+	#StartControllerImplementation startControllerImplementation
+	#PlayControllerImplementation playControllerImplementation
+	#SaveControllerImplementation saveControllerImplementation
+	#ResumeControllerImplementation resumeControllerImplementation
+	+LogicImplementation(SessionImplementationDAO sessionImplementationDAO)
+}
+mastermind.controllers.Logic <|-down- mastermind.controllers.implementation.LogicImplementation
+mastermind.controllers.implementation.LogicImplementation *-down-> mastermind.models.DAO.SessionImplementationDAO
+mastermind.controllers.implementation.LogicImplementation *-down-> mastermind.controllers.implementation.StartControllerImplementation
+mastermind.controllers.implementation.LogicImplementation *-down-> mastermind.controllers.implementation.PlayControllerImplementation
+mastermind.controllers.implementation.LogicImplementation *-down-> mastermind.controllers.implementation.SaveControllerImplementation
+mastermind.controllers.implementation.LogicImplementation *-down-> mastermind.controllers.implementation.ResumeControllerImplementation
+mastermind.controllers.implementation.LogicImplementation ..> mastermind.models.SessionImplementation
+
+class mastermind.controllers.implementation.PlayControllerImplementation {
+	-ProposalController proposalController
+	-UndoController undoController
+	-RedoController redoController
+	-ExitController exitController
+	~PlayControllerImplementation(Session session)
+	+Error addProposedCombination(List<Color> colors)
+	+void undo()
+	+void redo()
+	+void next()
+	+boolean undoable()
+	+boolean redoable()
+	+boolean isWinner()
+	+boolean isLooser()
+	+List<Color> getColors(int position)
+	+int getBlacks(int position)
+	+int getWhites(int position)
+	+int getAttempts()
+}
+mastermind.controllers.PlayController <|-down- mastermind.controllers.implementation.PlayControllerImplementation
+mastermind.controllers.implementation.PlayControllerImplementation *-down-> mastermind.controllers.ProposalController
+mastermind.controllers.implementation.PlayControllerImplementation *-down-> mastermind.controllers.UndoController
+mastermind.controllers.implementation.PlayControllerImplementation *-down-> mastermind.controllers.RedoController
+mastermind.controllers.implementation.PlayControllerImplementation *-down-> mastermind.controllers.ExitController
+
+class mastermind.controllers.implementation.ResumeControllerImplementation {
+	~ResumeControllerImplementation(Session session)
+	+void isNewGame(boolean newGame)
+}
+mastermind.controllers.ResumeController <|-down- mastermind.controllers.implementation.ResumeControllerImplementation
+mastermind.controllers.implementation.ResumeControllerImplementation ..> mastermind.models.SessionImplementation
+
+class mastermind.controllers.implementation.SaveControllerImplementation {
+	-SessionImplementationDAO sessionImplementationDAO
+	~SaveControllerImplementation(Session session, SessionImplementationDAO sessionImplementationDAO)
+	+void save(String name)
+	+void save()
+	+void next()
+	+boolean hasName()
+	+boolean exists(String name)
+}
+mastermind.controllers.SaveController <|-down- mastermind.controllers.implementation.SaveControllerImplementation
+mastermind.controllers.implementation.SaveControllerImplementation *-down-> mastermind.models.DAO.SessionImplementationDAO
+
+class mastermind.controllers.implementation.StartControllerImplementation {
+	-SessionImplementationDAO sessionImplementationDAO
+	~StartControllerImplementation(Session session, SessionImplementationDAO sessionImplementationDAO)
+	+void start()
+	+void start(String name)
+	+String[] getGamesNames()
+	+int getAttempts()
+	+List<Color> getColors(int position)
+	+int getBlacks(int position)
+	+int getWhites(int position)
+	+boolean isWinner()
+	+boolean isLooser()
+}
+mastermind.controllers.StartController <|-down- mastermind.controllers.implementation.StartControllerImplementation
+mastermind.controllers.implementation.StartControllerImplementation ..> mastermind.models.SessionImplementation
+mastermind.controllers.implementation.StartControllerImplementation ..> mastermind.models.DAO.SessionImplementationDAO
+
+....
+
+=== Paquete _mastermind.distributed.dispatchers_
+
+[plantuml, mastermindDistributedDispatchers, svg]
+....
+class mastermind.distributed.dispatchers.AttemptsDispatcher {
+	+AttemptsDispatcher(PlayControllerImplementation playControllerImplementation)
+	+void dispatch()
+}
+mastermind.distributed.dispatchers.Dispatcher <|-down- mastermind.distributed.dispatchers.AttemptsDispatcher
+mastermind.distributed.dispatchers.AttemptsDispatcher ..> mastermind.controllers.implementation.PlayControllerImplementation
+
+class mastermind.distributed.dispatchers.BlacksDispatcher {
+	+BlacksDispatcher(PlayControllerImplementation playControllerImplementation)
+	+void dispatch()
+}
+mastermind.distributed.dispatchers.Dispatcher <|-down- mastermind.distributed.dispatchers.BlacksDispatcher
+mastermind.distributed.dispatchers.BlacksDispatcher ..> mastermind.controllers.implementation.PlayControllerImplementation
+
+class mastermind.distributed.dispatchers.ColorsDispatcher {
+	+ColorsDispatcher(PlayControllerImplementation playControllerImplementation)
+	+void dispatch()
+}
+mastermind.distributed.dispatchers.Dispatcher <|-down- mastermind.distributed.dispatchers.ColorsDispatcher
+mastermind.distributed.dispatchers.ColorsDispatcher ..> mastermind.controllers.implementation.PlayControllerImplementation
+mastermind.distributed.dispatchers.ColorsDispatcher ..> mastermind.types.Color
+
+abstract class mastermind.distributed.dispatchers.Dispatcher {
+	#AcceptorController acceptorController
+	#TCPIP tcpip
+	+Dispatcher(AcceptorController acceptorController)
+	+{abstract}void dispatch()
+	+void associate(TCPIP tcpip)
+}
+mastermind.distributed.dispatchers.Dispatcher *-down-> mastermind.controllers.AcceptorController
+mastermind.distributed.dispatchers.Dispatcher *-down-> mastermind.distributed.dispatchers.TCPIP
+
+class mastermind.distributed.dispatchers.DispatcherPrototype {
+	-TCPIP tcpip
+	-Map<FrameType,Dispatcher> dispatcherMap
+	+DispatcherPrototype()
+	+void add(FrameType frameType, Dispatcher dispatcher)
+	+void dispatch(FrameType frameType)
+	+void serve()
+}
+mastermind.distributed.dispatchers.DispatcherPrototype *-down-> mastermind.distributed.dispatchers.TCPIP
+mastermind.distributed.dispatchers.DispatcherPrototype *-down-> mastermind.distributed.dispatchers.Dispatcher
+mastermind.distributed.dispatchers.DispatcherPrototype *-down-> mastermind.distributed.dispatchers.FrameType
+
+class mastermind.distributed.dispatchers.ExistsDispatcher {
+	+ExistsDispatcher(SaveControllerImplementation saveControllerImplementation)
+	+void dispatch()
+}
+mastermind.distributed.dispatchers.Dispatcher <|-down- mastermind.distributed.dispatchers.ExistsDispatcher
+mastermind.distributed.dispatchers.ExistsDispatcher ..> mastermind.controllers.implementation.SaveControllerImplementation
+
+enum mastermind.distributed.dispatchers.FrameType {
+	START
+	STATE
+	UNDO
+	REDO
+	UNDOABLE
+	REDOABLE
+	WINNER
+	LOOSER
+	ATTEMPTS
+	COLORS
+	PROPOSECOMBINATION
+	WIDTH
+	NEW_GAME
+	EXISTS
+	HAS_NAME
+	SAVE
+	NEXT
+	CLOSE
+	START_NAME
+	TITLES
+	GET_TITLE
+	SET_TITLE
+	SAVE_NAMED
+	BLACKS
+	WHITES
+	+{static}FrameType parser(String string)
+}
+
+class mastermind.distributed.dispatchers.GetTitleDispatcher {
+	+GetTitleDispatcher(SaveControllerImplementation saveControllerImplementation)
+	+void dispatch()
+}
+mastermind.distributed.dispatchers.Dispatcher <|-down- mastermind.distributed.dispatchers.GetTitleDispatcher
+mastermind.distributed.dispatchers.GetTitleDispatcher ..> mastermind.controllers.implementation.SaveControllerImplementation
+
+class mastermind.distributed.dispatchers.HasNameDispatcher {
+	+HasNameDispatcher(SaveControllerImplementation saveControllerImplementation)
+	+void dispatch()
+}
+mastermind.distributed.dispatchers.Dispatcher <|-down- mastermind.distributed.dispatchers.HasNameDispatcher
+mastermind.distributed.dispatchers.HasNameDispatcher ..> mastermind.controllers.implementation.SaveControllerImplementation
+
+class mastermind.distributed.dispatchers.LooserDispatcher {
+	+LooserDispatcher(PlayControllerImplementation playControllerImplementation)
+	+void dispatch()
+}
+mastermind.distributed.dispatchers.Dispatcher <|-down- mastermind.distributed.dispatchers.LooserDispatcher
+mastermind.distributed.dispatchers.LooserDispatcher ..> mastermind.controllers.implementation.PlayControllerImplementation
+
+class mastermind.distributed.dispatchers.NextDispatcher {
+	+NextDispatcher(PlayControllerImplementation playControllerImplementation)
+	+void dispatch()
+}
+mastermind.distributed.dispatchers.Dispatcher <|-down- mastermind.distributed.dispatchers.NextDispatcher
+mastermind.distributed.dispatchers.NextDispatcher ..> mastermind.controllers.implementation.PlayControllerImplementation
+
+class mastermind.distributed.dispatchers.ProposeCombinationDispatcher {
+	+ProposeCombinationDispatcher(PlayControllerImplementation playControllerImplementation)
+	+void dispatch()
+}
+mastermind.distributed.dispatchers.Dispatcher <|-down- mastermind.distributed.dispatchers.ProposeCombinationDispatcher
+mastermind.distributed.dispatchers.ProposeCombinationDispatcher ..> mastermind.controllers.implementation.PlayControllerImplementation
+mastermind.distributed.dispatchers.ProposeCombinationDispatcher ..> mastermind.types.Color
+
+class mastermind.distributed.dispatchers.RedoableDispatcher {
+	+RedoableDispatcher(PlayControllerImplementation playControllerImplementation)
+	+void dispatch()
+}
+mastermind.distributed.dispatchers.Dispatcher <|-down- mastermind.distributed.dispatchers.RedoableDispatcher
+mastermind.distributed.dispatchers.RedoableDispatcher ..> mastermind.controllers.implementation.PlayControllerImplementation
+
+class mastermind.distributed.dispatchers.RedoDispatcher {
+	+RedoDispatcher(PlayControllerImplementation playControllerImplementation)
+	+void dispatch()
+}
+mastermind.distributed.dispatchers.Dispatcher <|-down- mastermind.distributed.dispatchers.RedoDispatcher
+mastermind.distributed.dispatchers.RedoDispatcher ..> mastermind.controllers.implementation.PlayControllerImplementation
+
+class mastermind.distributed.dispatchers.ResumeDispatcher {
+	+ResumeDispatcher(ResumeControllerImplementation playControllerImplementation)
+	+void dispatch()
+}
+mastermind.distributed.dispatchers.Dispatcher <|-down- mastermind.distributed.dispatchers.ResumeDispatcher
+mastermind.distributed.dispatchers.ResumeDispatcher ..> mastermind.controllers.implementation.ResumeControllerImplementation
+
+class mastermind.distributed.dispatchers.SaveDispatcher {
+	+SaveDispatcher(SaveControllerImplementation saveControllerImplementation)
+	+void dispatch()
+}
+mastermind.distributed.dispatchers.Dispatcher <|-down- mastermind.distributed.dispatchers.SaveDispatcher
+mastermind.distributed.dispatchers.SaveDispatcher ..> mastermind.controllers.implementation.SaveControllerImplementation
+
+class mastermind.distributed.dispatchers.SaveNamedDispatcher {
+	+SaveNamedDispatcher(SaveControllerImplementation saveControllerImplementation)
+	+void dispatch()
+}
+mastermind.distributed.dispatchers.Dispatcher <|-down- mastermind.distributed.dispatchers.SaveNamedDispatcher
+mastermind.distributed.dispatchers.SaveNamedDispatcher ..> mastermind.controllers.implementation.SaveControllerImplementation
+
+class mastermind.distributed.dispatchers.SetTitleDispatcher {
+	+SetTitleDispatcher(SaveControllerImplementation saveControllerImplementation)
+	+void dispatch()
+}
+mastermind.distributed.dispatchers.Dispatcher <|-down- mastermind.distributed.dispatchers.SetTitleDispatcher
+mastermind.distributed.dispatchers.SetTitleDispatcher ..> mastermind.controllers.implementation.SaveControllerImplementation
+
+class mastermind.distributed.dispatchers.StartDispatcher {
+	+StartDispatcher(StartControllerImplementation startControllerImplementation)
+	+void dispatch()
+}
+mastermind.distributed.dispatchers.Dispatcher <|-down- mastermind.distributed.dispatchers.StartDispatcher
+mastermind.distributed.dispatchers.StartDispatcher ..> mastermind.controllers.implementation.StartControllerImplementation
+
+class mastermind.distributed.dispatchers.StartNameDispatcher {
+	+StartNameDispatcher(StartControllerImplementation startControllerImplementation)
+	+void dispatch()
+}
+mastermind.distributed.dispatchers.Dispatcher <|-down- mastermind.distributed.dispatchers.StartNameDispatcher
+mastermind.distributed.dispatchers.StartNameDispatcher ..> mastermind.controllers.implementation.StartControllerImplementation
+
+class mastermind.distributed.dispatchers.StateDispatcher {
+	+StateDispatcher(PlayControllerImplementation playControllerImplementation)
+	+void dispatch()
+}
+mastermind.distributed.dispatchers.Dispatcher <|-down- mastermind.distributed.dispatchers.StateDispatcher
+mastermind.distributed.dispatchers.StateDispatcher ..> mastermind.controllers.implementation.PlayControllerImplementation
+
+class mastermind.distributed.dispatchers.TCPIP {
+	+{static}TCPIP createClientSocket()
+	+{static}TCPIP createServerSocket()
+	+TCPIP(Socket socket)
+	+TCPIP(ServerSocket serverSocket, Socket socket)
+	+void send(Color value)
+	+void send(Error value)
+	+Error receiveError()
+	+Color receiveColor()
+	+void close()
+}
+santaTecla.utils.TCPIP <|-down- mastermind.distributed.dispatchers.TCPIP
+mastermind.distributed.dispatchers.TCPIP ..> mastermind.types.Color
+mastermind.distributed.dispatchers.TCPIP ..> mastermind.types.Error
+
+class mastermind.distributed.dispatchers.TitlesDispatcher {
+	+TitlesDispatcher(StartControllerImplementation startControllerImplementation)
+	+void dispatch()
+}
+mastermind.distributed.dispatchers.Dispatcher <|-down- mastermind.distributed.dispatchers.TitlesDispatcher
+mastermind.distributed.dispatchers.TitlesDispatcher ..> mastermind.controllers.implementation.StartControllerImplementation
+
+class mastermind.distributed.dispatchers.UndoableDispatcher {
+	+UndoableDispatcher(PlayControllerImplementation playControllerImplementation)
+	+void dispatch()
+}
+mastermind.distributed.dispatchers.Dispatcher <|-down- mastermind.distributed.dispatchers.UndoableDispatcher
+mastermind.distributed.dispatchers.UndoableDispatcher ..> mastermind.controllers.implementation.PlayControllerImplementation
+
+class mastermind.distributed.dispatchers.UndoDispatcher {
+	+UndoDispatcher(PlayControllerImplementation playControllerImplementation)
+	+void dispatch()
+}
+mastermind.distributed.dispatchers.Dispatcher <|-down- mastermind.distributed.dispatchers.UndoDispatcher
+mastermind.distributed.dispatchers.UndoDispatcher ..> mastermind.controllers.implementation.PlayControllerImplementation
+
+class mastermind.distributed.dispatchers.WhitesDispatcher {
+	+WhitesDispatcher(PlayControllerImplementation playControllerImplementation)
+	+void dispatch()
+}
+mastermind.distributed.dispatchers.Dispatcher <|-down- mastermind.distributed.dispatchers.WhitesDispatcher
+mastermind.distributed.dispatchers.WhitesDispatcher ..> mastermind.controllers.implementation.PlayControllerImplementation
+
+class mastermind.distributed.dispatchers.WidthDispatcher {
+	+WidthDispatcher(PlayControllerImplementation playControllerImplementation)
+	+void dispatch()
+}
+mastermind.distributed.dispatchers.Dispatcher <|-down- mastermind.distributed.dispatchers.WidthDispatcher
+mastermind.distributed.dispatchers.WidthDispatcher ..> mastermind.controllers.implementation.PlayControllerImplementation
+
+class mastermind.distributed.dispatchers.WinnerDispatcher {
+	+WinnerDispatcher(PlayControllerImplementation playControllerImplementation)
+	+void dispatch()
+}
+mastermind.distributed.dispatchers.Dispatcher <|-down- mastermind.distributed.dispatchers.WinnerDispatcher
+mastermind.distributed.dispatchers.WinnerDispatcher ..> mastermind.controllers.implementation.PlayControllerImplementation
+....
+
+=== Paquete _mastermind.models_
+
+[plantuml, mastermindModels, svg]
+....
+class  mastermind.models.Combination{
+- {static} WIDTH: int
+# colors: List<Color>
+# Combination()
++ {static} getWidth(): int
+}
+mastermind.models.Combination *-down-> java.util.List
+mastermind.models.Combination *-down-> mastermind.types.Color
+
+class  mastermind.models.Game{
+-{static}int MAX_LONG
+-SecretCombination secretCombination
+-List<ProposedCombination> proposedCombinations
+-List<Result> results
+-int attempts
+~Game()
+~void clear()
+~void addProposedCombination(List<Color> colors)
+~Memento createMemento()
+~void set(Memento memento)
+~boolean isLooser()
+~boolean isWinner()
+~int getAttempts()
+~List<Color> getColors(int position)
+~int getBlacks(int position)
+~int getWhites(int position)
+~int getWidth()
+~void save(FileWriter fileWriter)
+~void load(BufferedReader bufferedReader)
++SecretCombination getSecretCombination()
++ProposedCombination getProposedCombination(int position)
++Result getResult(int position)
+}
+mastermind.models.Game *-down-> java.util.List
+mastermind.models.Game *-down-> mastermind.models.SecretCombination
+mastermind.models.Game *-down-> mastermind.models.Result
+mastermind.models.Game *-down-> mastermind.models.ProposedCombination
+mastermind.models.Game ..> mastermind.models.Memento
+mastermind.models.Game ..> mastermind.types.Color
+mastermind.models.Game ..> mastermind.models.Combination
+
+class  mastermind.models.Memento{
+- proposedCombinations: List<ProposedCombination>
+- results: List<Result>
+- attempts: int
+~ Memento(int)
+~ set(ProposedCombination, Result): void
+~ getSize(): int
+~ getResult(int): Result
+~ getProposedCombination(int): ProposedCombination
+~ getAttempts(): int
+}
+mastermind.models.Memento *-down-> java.util.List
+mastermind.models.Memento *-down-> mastermind.models.Result
+mastermind.models.Memento *-down-> mastermind.models.ProposedCombination
+
+class  mastermind.models.ProposedCombination{
++ ProposedCombination(List<Color>)
++ ProposedCombination()
+~ contains(Color, int): boolean
+~ contains(Color): boolean
+~ copy(): ProposedCombination
+}
+mastermind.models.Combination <|-down- mastermind.models.ProposedCombination
+
+class  mastermind.models.Registry{
+- mementoList: ArrayList<Memento>
+- game: Game
+- firstPrevious: int
+~ Registry(Game)
+~ reset(): void
+~ undo(Game): void
+~ redo(Game): void
+~ registry(): void
+~ redoable(): boolean
+~ undoable(): boolean
+}
+mastermind.models.Registry *-down-> mastermind.models.Memento
+mastermind.models.Registry *-down-> java.util.ArrayList
+mastermind.models.Registry *-down-> mastermind.models.Game
+
+class  mastermind.models.Result{
+- blacks: int
+- whites: int
++ Result(int, int)
++ Result()
+~ copy(): Result
+~ isWinner(): boolean
+~ getBlacks(): int
+~ getWhites(): int
+}
+mastermind.models.Result ..> mastermind.models.Combination
+
+class  mastermind.models.SecretCombination{
+~ SecretCombination()
+~ getResult(ProposedCombination): Result
++void load(BufferedReader bufferedReader)
+}
+mastermind.models.Combination <|-down- mastermind.models.SecretCombination
+mastermind.models.SecretCombination ..> mastermind.models.Result
+mastermind.models.SecretCombination ..> mastermind.models.ProposedCombination
+
+interface mastermind.models.Session {
+StateValue getValueState()
+int getWidth()
+}
+
+class  mastermind.models.SessionImplementation{
+	-State state
+	-Game game
+	-Registry registry
+	-String name
+	+SessionImplementation()
+	+void next()
+	+void addProposedCombination(List<Color> colors)
+	+boolean undoable()
+	+boolean redoable()
+	+void undo()
+	+void redo()
+	+void isNewGame()
+	+void clearGame()
+	+void registry()
+	+void resetRegistry()
+	+void setStateValue(StateValue stateValue)
+	+boolean isWinner()
+	+boolean isLooser()
+	+List<Color> getColors(int position)
+	+int getAttempts()
+	+int getBlacks(int position)
+	+int getWhites(int position)
+	+boolean hasName()
+	+Game getGame()
+	+SecretCombination getSecretCombination()
+	+void setName(String name)
+	+String getName()
+	+int getWidth()
+	+StateValue getValueState()
+}
+mastermind.models.Session <|-down- mastermind.models.SessionImplementation
+mastermind.models.SessionImplementation *-down-> mastermind.models.Registry
+mastermind.models.SessionImplementation *-down-> mastermind.models.State
+mastermind.models.SessionImplementation *-down-> mastermind.models.Game
+mastermind.models.SessionImplementation ..> mastermind.types.Color
+mastermind.models.SessionImplementation ..> mastermind.models.StateValue
+mastermind.models.SessionImplementation ..> mastermind.models.SecretCombination
+
+class  mastermind.models.State{
+- stateValue: StateValue
++ State()
++ next(): void
++ reset(): void
++ getValueState(): StateValue
+}
+mastermind.models.State *-down-> mastermind.models.StateValue
+
+enum mastermind.models.StateValue {
+INITIAL
+IN_GAME
+FINAL
+EXIT
+}
+....
+
+=== Paquete _mastermind.models.DAO_
+
+[plantuml, mastermindModelsDAO, svg]
+....
+class mastermind.models.DAO.CombinationDAO {
+	#Combination combination
+	+CombinationDAO(Combination combination)
+}
+mastermind.models.DAO.CombinationDAO *-down-> mastermind.models.Combination
+
+class mastermind.models.DAO.GameDAO {
+	#Game game
+	#GameDAO(Game game)
+}
+mastermind.models.DAO.GameDAO *-down-> mastermind.models.Game
+
+class mastermind.models.DAO.ResultDAO {
+	#Result result
+	#ResultDAO(Result result)
+	+Result getResult()
+}
+mastermind.models.DAO.ResultDAO *-down-> mastermind.models.Result
+
+abstract class mastermind.models.DAO.SessionImplementationDAO {
+	#SessionImplementation sessionImplementation
+	+void associate(SessionImplementation sessionImplementation)
+	+void save()
+	+{abstract}void save(String name)
+	+{abstract}void load(String name)
+	+{abstract}String[] getGamesNames()
+	+{abstract}boolean exists(String name)
+}
+mastermind.models.DAO.SessionImplementationDAO *-down-> mastermind.models.SessionImplementation
+....
+
+=== Paquete _mastermind.models.dataBase_
+
+[plantuml,  mastermindModelsDataBase , svg]
+....
+interface mastermind.models.dataBase.DBDAO {
+	void save(String name, Connection connection, Boolean exists)
+	void load(String name, Connection connection)
+}
+
+class mastermind.models.dataBase.GameDBDAO {
+	#GameDBDAO(Game game)
+	+void save(String name, Connection connection, Boolean exists)
+	-void insert(String name, Connection connection, int attempts)
+	+void load(String name, Connection connection)
+}
+mastermind.models.DAO.GameDAO <|-down- mastermind.models.dataBase.GameDBDAO
+mastermind.models.dataBase.DBDAO <|.down. mastermind.models.dataBase.GameDBDAO
+mastermind.models.dataBase.GameDBDAO ..> mastermind.models.Combination
+mastermind.models.dataBase.GameDBDAO ..> mastermind.models.ProposedCombination
+mastermind.models.dataBase.GameDBDAO ..> mastermind.models.Result
+mastermind.models.dataBase.GameDBDAO ..> mastermind.types.Color
+
+class mastermind.models.dataBase.SessionImplementationDBDAO {
+	-{static}String URL
+	-{static}String USER
+	-{static}String PASSWORD
+	-GameDBDAO gameDBDAO
+	#Connection connection
+	+void associate(SessionImplementation sessionImplementation)
+	+SessionImplementationDBDAO()
+	+void load(String name)
+	+void save(String name)
+	+String[] getGamesNames()
+	+boolean exists(String name)
+}
+mastermind.models.DAO.SessionImplementationDAO <|-down- mastermind.models.dataBase.SessionImplementationDBDAO
+mastermind.models.dataBase.SessionImplementationDBDAO *-down-> mastermind.models.dataBase.GameDBDAO
+mastermind.models.dataBase.SessionImplementationDBDAO ..> mastermind.models.Combination
+mastermind.models.dataBase.SessionImplementationDBDAO ..> mastermind.models.StateValue
+....
+
+=== Paquete _mastermind.models.Files_
+
+[plantuml,  mastermindModelsFiles , svg]
+....
+abstract class mastermind.models.Files.CombinationFileDAO {
+	~CombinationFileDAO(Combination combination)
+	+void save(FileWriter fileWriter)
+	+void load(BufferedReader bufferedReader)
+}
+mastermind.models.DAO.CombinationDAO <|-down- mastermind.models.Files.CombinationFileDAO
+mastermind.models.Files.FileDAO <|.down. mastermind.models.Files.CombinationFileDAO
+mastermind.models.Files.CombinationFileDAO ..> mastermind.models.Combination
+mastermind.models.Files.CombinationFileDAO ..> mastermind.types.Color
+
+interface mastermind.models.Files.FileDAO {
+	void save(FileWriter fileWriter)
+	void load(BufferedReader bufferedReader)
+}
+
+class mastermind.models.Files.GameFileDAO {
+	-SecretCombinationFileDAO secretCombinationFileDAO
+	~GameFileDAO(Game game)
+	+void save(FileWriter fileWriter)
+	+void load(BufferedReader bufferedReader)
+}
+mastermind.models.DAO.GameDAO <|-down- mastermind.models.Files.GameFileDAO
+mastermind.models.Files.FileDAO <|.down. mastermind.models.Files.GameFileDAO
+mastermind.models.Files.GameFileDAO *-down-> mastermind.models.Files.SecretCombinationFileDAO
+mastermind.models.Files.GameFileDAO ..> mastermind.models.Files.ProposedCombinationFileDAO
+mastermind.models.Files.GameFileDAO ..> mastermind.models.Files.ResultFileDAO
+mastermind.models.Files.GameFileDAO ..> mastermind.models.Result
+mastermind.models.Files.GameFileDAO ..> mastermind.models.ProposedCombination
+
+class mastermind.models.Files.ProposedCombinationFileDAO {
+	~ProposedCombinationFileDAO(ProposedCombination proposedCombination)
+	+ProposedCombination getProposedCombination()
+}
+mastermind.models.Files.CombinationFileDAO <|-down- mastermind.models.Files.ProposedCombinationFileDAO
+mastermind.models.Files.ProposedCombinationFileDAO ..> mastermind.models.ProposedCombination
+
+class mastermind.models.Files.ResultFileDAO {
+	~ResultFileDAO(Result result)
+	+void save(FileWriter fileWriter)
+	+void load(BufferedReader bufferedReader)
+}
+mastermind.models.DAO.ResultDAO <|-down- mastermind.models.Files.ResultFileDAO
+mastermind.models.Files.FileDAO <|.down. mastermind.models.Files.ResultFileDAO
+
+class mastermind.models.Files.SecretCombinationFileDAO {
+	~SecretCombinationFileDAO(SecretCombination secretCombination)
+	+void load(BufferedReader bufferedReader)
+}
+mastermind.models.Files.CombinationFileDAO <|-down- mastermind.models.Files.SecretCombinationFileDAO
+
+class mastermind.models.Files.SessionImplementationFileDAO {
+	#{static}String EXTENSION
+	#{static}String DIRECTORY
+	#{static}File directory
+	-GameFileDAO gameFileDAO
+	+void associate(SessionImplementation sessionImplementation)
+	+void load(String name)
+	+void save(String name)
+	+boolean exists(String name)
+	+String[] getGamesNames()
+}
+mastermind.models.DAO.SessionImplementationDAO <|-down- mastermind.models.Files.SessionImplementationFileDAO
+mastermind.models.Files.SessionImplementationFileDAO *-down-> mastermind.models.Files.GameFileDAO
+mastermind.models.Files.SessionImplementationFileDAO ..> mastermind.models.StateValue
+....
+
+=== Paquete _mastermind.types_
+
+[plantuml,  mastermindTypes , svg]
+....
+enum mastermind.types.Color {
+RED
+BLUE
+YELLOW
+GREEN
+ORANGE
+PURPLE
+~{static}int length()
+}
+
+enum mastermind.types.Error {
+DUPLICATED
+WRONG_CHARACTERS
+WRONG_LENGTH
+}
+....
+
+=== Paquete _mastermind.views_
+
+[plantuml,  mastermindViews , svg]
+....
+class  mastermind.views.PlayView{
+~void interact(PlayController playController)
+}
+mastermind.views.PlayView ..> mastermind.controllers.PlayController
+mastermind.views.PlayView ..> mastermind.views.menus.PlayMenu
+mastermind.views.PlayView ..> mastermind.views.models.GameView
+
+class  mastermind.views.ResumeView{
+~ ResumeView()
+~ interact(ResumeController): void
+}
+mastermind.views.ResumeView ..> mastermind.controllers.ResumeController
+mastermind.views.ResumeView ..> mastermind.views.models.MessageView
+mastermind.views.ResumeView ..> santaTecla.utils.YesNoDialog
+
+class mastermind.views.SaveView {
+~void interact(SaveController saveController)
+}
+santaTecla.utils.WithConsoleView <|-down- mastermind.views.SaveView
+mastermind.views.SaveView ..> mastermind.controllers.SaveController
+mastermind.views.SaveView ..> mastermind.views.models.MessageView
+mastermind.views.SaveView ..> santaTecla.utils.YesNoDialog
+
+class  mastermind.views.StartView{
+~ StartView()
+~ interact(StartController): void
+}
+mastermind.views.StartView ..> mastermind.controllers.StartController
+mastermind.views.StartView..> mastermind.views.models.MessageView
+mastermind.views.StartView..> mastermind.views.models.GameView
+mastermind.views.StartView..> mastermind.views.menus.StartMenu
+
+class  mastermind.views.View{
+-StartView startView
+-PlayView playView
+-SaveView saveView
+-ResumeView resumeView
++View()
++void interact(AcceptorController acceptorController)
++void visit(StartController startController)
++void visit(PlayController playController)
++void visit(SaveController saveController)
++void visit(ResumeController resumeController)
+}
+mastermind.controllers.ControllersVisitor <|-down- mastermind.views.View
+mastermind.views.View *-down-> mastermind.views.PlayView
+mastermind.views.View *-down-> mastermind.views.StartView
+mastermind.views.View *-down-> mastermind.views.SaveView
+mastermind.views.View *-down-> mastermind.views.ResumeView
+mastermind.views.View ..> mastermind.controllers.AcceptorController
+....
+
+=== Paquete _mastermind.views.menus_
+
+[plantuml,  mastermindViewsMenus , svg]
+....
+class  mastermind.views.menus.Command{
+# acceptorController: AcceptorController
+# Command(AcceptorController, String)
+}
+santaTecla.utils.Command <|-down- mastermind.views.menus.Command
+mastermind.views.menus.Command *-down-> mastermind.controllers.AcceptorController
+
+class  mastermind.views.menus.ExitCommand{
+# ExitCommand(PlayController)
+# execute(): void
+# isActive(): boolean
+}
+mastermind.views.menus.Command <|-down- mastermind.views.menus.ExitCommand
+mastermind.views.menus.ExitCommand ..> mastermind.controllers.PlayController
+mastermind.views.menus.ExitCommand ..> mastermind.views.models.MessageView
+
+class  mastermind.views.menus.GameSelectCommand{
+# GameSelectCommand(StartController, String)
+# execute(): void
+# isActive(): boolean
+}
+mastermind.views.menus.Command <|-down- mastermind.views.menus.GameSelectCommand
+mastermind.views.menus.GameSelectCommand ..> mastermind.controllers.StartController
+
+class  mastermind.views.menus.GameSelectMenu{
+~ GameSelectMenu(StartController)
+}
+santaTecla.utils.Menu <|-down- mastermind.views.menus.GameSelectMenu
+mastermind.views.menus.GameSelectMenu ..> mastermind.controllers.StartController
+mastermind.views.menus.GameSelectMenu ..> mastermind.views.menus.GameSelectCommand
+
+class  mastermind.views.menus.NewGameCommand{
+# NewGameCommand(StartController)
+# execute(): void
+# isActive(): boolean
+}
+mastermind.views.menus.Command <|-down- mastermind.views.menus.NewGameCommand
+mastermind.views.menus.NewGameCommand ..> mastermind.controllers.StartController
+mastermind.views.menus.NewGameCommand ..> mastermind.views.models.MessageView
+
+class  mastermind.views.menus.OpenGameCommand{
+# OpenGameCommand(StartController)
+# execute(): void
+# isActive(): boolean
+}
+mastermind.views.menus.Command <|-down- mastermind.views.menus.OpenGameCommand
+mastermind.views.menus.OpenGameCommand ..> mastermind.controllers.StartController
+mastermind.views.menus.OpenGameCommand ..> mastermind.views.models.MessageView
+mastermind.views.menus.OpenGameCommand ..> mastermind.views.menus.GameSelectMenu
+
+class  mastermind.views.menus.PlayMenu{
++ PlayMenu(PlayController)
+}
+santaTecla.utils.Menu <|-down- mastermind.views.menus.PlayMenu
+mastermind.views.menus.PlayMenu ..> mastermind.controllers.PlayController
+mastermind.views.menus.PlayMenu ..> mastermind.views.menus.RedoCommand
+mastermind.views.menus.PlayMenu ..> mastermind.views.menus.UndoCommand
+mastermind.views.menus.PlayMenu ..> mastermind.views.menus.ProposeCommand
+mastermind.views.menus.PlayMenu ..> mastermind.views.menus.ExitCommand
+
+class  mastermind.views.menus.ProposeCommand{
+~ ProposeCommand(PlayController)
+# execute(): void
+# isActive(): boolean
+}
+mastermind.views.menus.Command <|-down- mastermind.views.menus.ProposeCommand
+mastermind.views.menus.ProposeCommand ..> mastermind.controllers.PlayController
+mastermind.views.menus.ProposeCommand ..> mastermind.views.models.ProposedCombinationView
+mastermind.views.menus.ProposeCommand ..> mastermind.views.models.GameView
+mastermind.views.menus.ProposeCommand ..> mastermind.types.Color
+mastermind.views.menus.ProposeCommand ..> mastermind.types.Error
+mastermind.views.menus.ProposeCommand ..> mastermind.views.models.MessageView
+
+class  mastermind.views.menus.RedoCommand{
+~ RedoCommand(PlayController)
+# execute(): void
+# isActive(): boolean
+}
+mastermind.views.menus.Command <|-down- mastermind.views.menus.RedoCommand
+mastermind.views.menus.RedoCommand ..> mastermind.controllers.PlayController
+mastermind.views.menus.RedoCommand ..> mastermind.views.models.MessageView
+
+class  mastermind.views.menus.StartMenu{
++ StartMenu(StartController)
+}
+santaTecla.utils.Menu <|-down- mastermind.views.menus.StartMenu
+mastermind.views.menus.StartMenu ..> mastermind.controllers.StartController
+mastermind.views.menus.StartMenu ..> mastermind.views.menus.NewGameCommand
+mastermind.views.menus.StartMenu ..> mastermind.views.menus.OpenGameCommand
+
+class  mastermind.views.menus.UndoCommand{
+~ UndoCommand(PlayController)
+# execute(): void
+# isActive(): boolean
+}
+mastermind.views.menus.Command <|-down- mastermind.views.menus.UndoCommand
+mastermind.views.menus.UndoCommand ..> mastermind.controllers.PlayController
+mastermind.views.menus.UndoCommand ..> mastermind.views.models.MessageView
+....
+
+=== Paquete _mastermind.views.models_
+
+[plantuml,  mastermindViewsModels , svg]
+....
+class mastermind.views.models.AttemptsView {
+-GameController gameController
+~AttemptsView(GameController gameController)
+~void writeln()
+}
+mastermind.views.models.AttemptsView *-down-> mastermind.controllers.GameController
+mastermind.views.models.AttemptsView ..> mastermind.views.models.MessageView
+
+class  mastermind.views.models.GameView{
+~GameController gameController
++GameView(GameController gameController)
+~void writeln()
+}
+mastermind.views.models.GameView *-down-> mastermind.controllers.GameController
+mastermind.views.models.GameView..> mastermind.views.models.SecretCombinationView
+mastermind.views.models.GameView..>  mastermind.views.models.ProposedCombinationView
+mastermind.views.models.GameView..>  mastermind.views.models.ResultView
+mastermind.views.models.GameView..> mastermind.views.models.MessageView
+mastermind.views.models.GameView..> mastermind.views.models.AttemptsView
+
+class  mastermind.views.models.ProposedCombinationView{
+-GameController gameController
++ProposedCombinationView(GameController gameController)
+~void write(int position)
++List<Color> read()
+}
+santaTecla.utils.WithConsoleView <|-down- mastermind.views.models.ProposedCombinationView
+mastermind.views.models.ProposedCombinationView *-down-> mastermind.controllers.GameController
+mastermind.views.models.ProposedCombinationView..> mastermind.views.models.MessageView
+mastermind.views.models.ProposedCombinationView ..>  mastermind.views.models.ColorView
+mastermind.views.models.ProposedCombinationView ..>  mastermind.types.Color
+
+class  mastermind.views.models.ResultView{
+-GameController gameController
+~ResultView(GameController gameController)
+~void writeln(int position)
+}
+mastermind.views.models.ResultView *-down-> mastermind.controllers.GameController
+mastermind.views.models.ResultView..> mastermind.views.models.MessageView
+
+class  mastermind.views.models.SecretCombinationView{
+-Controller controller
+~SecretCombinationView(Controller controller)
+~void writeln()
+}
+mastermind.views.models.SecretCombinationView *-down-> mastermind.controllers.Controller
+mastermind.views.models.SecretCombinationView..> mastermind.views.models.MessageView
+
+class  mastermind.views.models.ColorView{
+~{static}char[] INITIALS
+#Color color
+~ColorView(Color color)
+~{static}String allInitials()
+~char getInitial()
+~{static}Color getInstance(char character)
+~void write()
+}
+santaTecla.utils.WithConsoleView <|-down- mastermind.views.models.ColorView
+mastermind.views.models.ColorView *-down-> mastermind.types.Color
+
+class  mastermind.views.models.ErrorView{
+~{static}String[] MESSAGES
+~Error error
+~ErrorView(Error error)
+~String getMessage()
+~void writeln()
+}
+santaTecla.utils.WithConsoleView <|-down- mastermind.views.models.ErrorView
+mastermind.views.models.ErrorView *-down-> mastermind.types.Error
+mastermind.views.models.ErrorView ..> mastermind.views.models.ColorView
+
+enum mastermind.views.models.MessageView {
+ATTEMPTS
+SECRET
+RESUME
+SAVE
+RESULT
+PROPOSED_COMBINATION
+TITLE
+WINNER
+LOOSER
+OPTION
+PROPOSE_COMMAND
+UNDO_COMMAND
+REDO_COMMAND
+NEWGAME_COMMAND
+EXIT_COMMAND
+OPENGAME_COMMAND
+NAME
+NEW_LINE
+message
+console
+-MessageView(String message)
++String getMessage()
++void write()
++void writeln()
++void writeln(int attempts)
++void writeln(int blacks, int whites)
+}
+mastermind.views.models.MessageView *-down-> santaTecla.utils.Console
+....
+
+=== Paquete _santaTecla.utils_
+
+[plantuml,  santaTecla.utils , svg]
+....
+class  santaTecla.utils.ClosedInterval{
+- min: int
+- max: int
++ ClosedInterval(int, int)
++ includes(int): boolean
+}
+
+class  santaTecla.utils.Command{
+# title: String
+# Command(String)
+# {abstract} execute(): void
+# {abstract} isActive(): boolean
+~ getTitle(): String
+}
+santaTecla.utils.WithConsoleView <|-down- santaTecla.utils.Command
+
+class  santaTecla.utils.Console{
+- bufferedReader: BufferedReader
++ Console()
++ write(char): void
++ write(String): void
++ readInt(String): int
++ readChar(String): char
++ readString(String): String
++ writeln(String): void
++ writeln(): void
+- writeError(String): void
+}
+santaTecla.utils.Console *-down-> java.io.BufferedReader
+
+class  santaTecla.utils.Menu{
+-{static}String OPTION
+- commandList: ArrayList<Command>
++ Menu()
++ execute(): void
+# addCommand(Command): void
+}
+santaTecla.utils.WithConsoleView <|-down- santaTecla.utils.Menu
+santaTecla.utils.Menu *-down-> java.util.ArrayList
+santaTecla.utils.Menu *-down-> santaTecla.utils.Command
+
+class  santaTecla.utils.TCPIP{
+-ServerSocket serverSocket
+-Socket socket
+-PrintWriter out
+-BufferedReader in
++TCPIP(Socket socket)
++TCPIP(ServerSocket serverSocket, Socket socket)
++{static}TCPIP createClientSocket()
++{static}TCPIP createServerSocket()
++void send(String value)
++void send(int value)
++void send(boolean value)
++String receiveLine()
++boolean receiveBoolean()
++int receiveInt()
++void close()
+}
+santaTecla.utils.TCPIP *-down-> java.net.ServerSocket
+santaTecla.utils.TCPIP *-down-> java.io.PrintWriter
+santaTecla.utils.TCPIP *-down-> java.net.Socket
+santaTecla.utils.TCPIP *-down-> java.io.BufferedReader
+
+class  santaTecla.utils.WithConsoleView{
+# console: Console
+# WithConsoleView()
+}
+santaTecla.utils.WithConsoleView *-down-> santaTecla.utils.Console
+
+class  santaTecla.utils.YesNoDialog{
+- {static} AFIRMATIVE: char
+- {static} NEGATIVE: char
+- {static} QUESTION: String
+- {static} MESSAGE: String
++ YesNoDialog()
++ read(String): boolean
+- {static} isNegative(char): boolean
+- {static} isAfirmative(char): boolean
+}
+santaTecla.utils.WithConsoleView <|-down- santaTecla.utils.YesNoDialog
+....
+
+== Calidad de Software
+
+=== Diseño
+
+- [red]#_**Baja Cohesión**: Jerarquías de Herencia Paralelas: en clases principales_#
+
+=== Rediseño
+
+
+== Vista de Desarrollo/Implementación
+
+[plantuml,diagramaImplementacionStandalone,svg]
+....
+
+package "  "  as mastermind {
+}
+package "  "  as mastermind.controllers {
+}
+package "  "  as mastermind.controllers.implementation {
+}
+package "  "  as mastermind.models {
+}
+package "  "  as mastermind.models.DAO {
+}
+package "  "  as mastermind.views {
+}
+package "  "  as mastermind.utils {
+}
+package "  "  as java.io {
+}
+package "  "  as java.util {
+}
+
+[mastermind.jar] as jar
+
+jar *--> mastermind
+jar *--> mastermind.controllers
+jar *--> mastermind.controllers.implementation
+jar *--> mastermind.models
+jar *--> mastermind.models.DAO
+jar *--> mastermind.views
+jar *--> mastermind.utils
+jar *--> java.io
+jar *--> java.util
+
+....
+
+[plantuml,diagramaImplementacionClient,svg]
+....
+
+package "  "  as mastermind {
+}
+package "  "  as mastermind.distributed {
+}
+package "  "  as mastermind.controllers {
+}
+package "  "  as mastermind.controllers.implementation {
+}
+package "  "  as mastermind.models {
+}
+package "  "  as mastermind.models.DAO {
+}
+package "  "  as mastermind.views {
+}
+package "  "  as mastermind.utils {
+}
+package "  "  as java.io {
+}
+package "  "  as java.util {
+}
+
+[mastermindClient.jar] as jarClient
+
+jarClient *--> mastermind
+jarClient *--> mastermind.distributed
+jarClient *--> mastermind.controllers
+jarClient *--> mastermind.controllers.implementation
+jarClient *--> mastermind.models
+jarClient *--> mastermind.models.DAO
+jarClient *--> mastermind.views
+jarClient *--> mastermind.utils
+jarClient *--> java.io
+jarClient *--> java.util
+
+....
+
+[plantuml,diagramaImplementacionServer,svg]
+....
+
+package "  "  as mastermind {
+}
+package "  "  as mastermind.distributed {
+}
+package "  "  as mastermind.distributed.dispatchers {
+}
+package "  "  as mastermind.controllers {
+}
+package "  "  as mastermind.controllers.implementation {
+}
+package "  "  as mastermind.models {
+}
+package "  "  as mastermind.models.DAO {
+}
+package "  "  as mastermind.views {
+}
+package "  "  as mastermind.utils {
+}
+package "  "  as java.io {
+}
+package "  "  as java.util {
+}
+
+[mastermindServer.jar] as jarServer
+
+jarServer *--> mastermind
+jarServer *--> mastermind.distributed
+jarServer *--> mastermind.distributed.dispatchers
+jarServer *--> mastermind.controllers
+jarServer *--> mastermind.controllers.implementation
+jarServer *--> mastermind.models
+jarServer *--> mastermind.models.DAO
+jarServer *--> mastermind.views
+jarServer *--> mastermind.utils
+jarServer *--> java.io
+jarServer *--> java.util
+....
+
+== Vista de Despliegue/Física
+
+[plantuml,diagramaDespliegue,svg]
+....
+
+package stanalone {
+
+node standaloneNode #DDDDDD [
+<b>Personal Computer</b>
+----
+memory : xxx Mb
+cpu : xxx GHz
+]
+
+[ masterming.jar ] as standaloneComponent
+
+}
+
+standaloneNode *--> standaloneComponent
+
+package clientServer {
+
+node clientNode #DDDDDD [
+<b>Client Computer</b>
+----
+memory : xxx Mb
+cpu : xxx GHz
+]
+
+[ mastermingClient.jar ] as clientComponent
+
+node serverNode #DDDDDD [
+<b>Server Computer</b>
+----
+memory : xxx Mb
+cpu : xxx GHz
+]
+
+[ mastermingServer.jar ] as serverComponent
+
+}
+
+clientNode *--> clientComponent
+serverNode *--> serverComponent
+
+clientNode -right-> serverNode : TCP/IP
+....
+
+== Vista de Procesos
+
+- No hay concurrencia
+

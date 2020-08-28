@@ -18,7 +18,7 @@ public class SessionImplementationDBDAO extends SessionImplementationDAO {
 
 	private static final String USER = "root";
 
-	private static final String PASSWORD = "rootroot";
+	private static final String PASSWORD = "";
 
 	private GameDBDAO gameDBDAO;
 
