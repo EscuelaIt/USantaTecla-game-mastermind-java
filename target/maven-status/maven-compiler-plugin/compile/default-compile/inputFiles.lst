@@ -1,13 +1,43 @@
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\mastermind\ProposedCombination.java
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\mastermind\Result.java
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\mastermind\Color.java
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\utils\YesNoDialog.java
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\mastermind\Combination.java
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\mastermind\SecretCombination.java
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\utils\ClosedInterval.java
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\mastermind\Error.java
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\mastermind\Mastermind.java
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\mastermind\Message.java
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\utils\Console.java
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\utils\WithConsoleModel.java
-C:\Users\Steven\Documents\Beca Luis\mastermind\mastermind\src\main\java\usantatecla\mastermind\Game.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\controllers\ProposalController.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\console\SecretCombinationView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\ConsoleMastermind.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\console\ProposalView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\console\ResumeView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\models\ProposedCombination.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\ErrorView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\graphics\Constraints.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\console\ResultView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\models\SecretCombination.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\console\ErrorView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\ColorView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\utils\Console.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\graphics\ProposedCombinationView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\console\StartView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\graphics\AttemptsView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\utils\ClosedInterval.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\controllers\ResumeController.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\types\Error.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\graphics\ProposedCombinationsView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\controllers\Controller.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\console\ColorView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\console\ConsoleView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\controllers\StartController.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\console\AttemptsView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\graphics\ResultView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\utils\YesNoDialog.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\graphics\GraphicsView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\utils\WithConsoleView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\controllers\Logic.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\graphics\ProposalCombinationView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\console\ProposedCombinationView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\View.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\Mastermind.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\graphics\GameView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\MessageView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\GraphicsMastermind.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\models\Game.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\models\Combination.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\models\Result.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\graphics\SecretCombinationView.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\types\Color.java
+C:\Users\Steven\Documents\Beca Luis\mastermind org\mastermind\src\main\java\usantatecla\mastermind\views\graphics\ResumeDialog.java
