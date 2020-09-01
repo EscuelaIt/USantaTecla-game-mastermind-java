@@ -14,7 +14,7 @@ public class PlayController extends AcceptorController {
 
 	private RedoController redoController;
 
-	PlayController(Session session) {
+	public PlayController(Session session) {
 		super(session);
 		this.proposalController = new ProposalController(this.session);
 		this.undoController = new UndoController(this.session);

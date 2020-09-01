@@ -84,8 +84,4 @@ class Game {
 		return Combination.getWidth();
 	}
 
-	public List<Color> getSecretCombination() {
-		return this.secretCombination.colors;
-	}
-
 }
