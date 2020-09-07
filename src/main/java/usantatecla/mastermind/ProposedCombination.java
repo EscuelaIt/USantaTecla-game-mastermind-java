@@ -24,23 +24,24 @@ class ProposedCombination extends Combination {
 					} else {
 						int j = 0;
 						boolean done = false;
-						while (j < this.colors.length && !done) {
-							if (this.colors[j] == color) {
+						while (j < this.colors.size()   && !done) {
+							if (this.colors.get(j) == color) {
 								error = Error.DUPLICATED;
 								done = true;
 							}
+							
 							j++;
-							if (this.colors[j] == null) {
-								this.colors[j] = color;
-							}
 						}
+						
+							this.colors.add(color);
+						
 					}
 				}
 			}
 			if (error != null) {
 				error.writeln();
-				for (int i= 0; i < this.colors.length; i++) {
-					this.colors[i] = null;
+				for (int i= 0; i < this.colors.size(); i++) {
+					this.colors.set(i, null);
 				}
 			}
 		} while (error != null);
@@ -48,12 +49,12 @@ class ProposedCombination extends Combination {
 	}
 
 	boolean contains(Color color, int position) {
-		return this.colors[position] == color;
+		return this.colors.get(position) == color;
 	}
 
 	boolean contains(Color color) {
-		for (int i = 0; i < this.colors.length; i++) {
-			if (this.colors[i] == color) {
+		for (int i = 0; i < this.colors.size(); i++) {
+			if (this.colors.get(i) == color) {
 				return true;
 			}
 		}

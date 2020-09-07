@@ -1,22 +1,26 @@
 package usantatecla.mastermind;
 
 import java.util.Random;
+import java.util.Collections;
 
 class SecretCombination extends Combination {
 
 	SecretCombination() {
-		Random random;
-		for (int i = 0; i < this.colors.length; i++) {
-			random = new Random(System.currentTimeMillis());
-			this.colors[i] = Color.getInstance(random.nextInt(Color.length()));
+		super();
+		for(Color color: Color.values()) {
+			this.colors.add(color);
 		}
-		this.shuffleArray(this.colors);
+		Random random = new Random(System.currentTimeMillis());
+		for (int i = 0; i < Color.length() - Combination.getWidth(); i++) {
+			this.colors.remove(random.nextInt(this.colors.size()));
+		}
+		Collections.shuffle(this.colors);
 	}
 
 	Result getResult(ProposedCombination proposedCombination) {
 		int blacks = 0;
-		for (int i = 0; i < this.colors.length; i++) {
-			if (proposedCombination.contains(this.colors[i], i)) {
+		for (int i = 0; i < this.colors.size(); i++) {
+			if (proposedCombination.contains(this.colors.get(i), i)) {
 				blacks++;
 			}
 		}

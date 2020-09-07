@@ -1,15 +1,18 @@
 package usantatecla.mastermind;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import usantatecla.utils.WithConsoleModel;
 
 abstract class Combination extends WithConsoleModel{
 	
 	private static final int WIDTH = 4;
 
-	protected Color[] colors;
+	protected List<Color> colors;
 	
 	protected Combination (){
-		this.colors = new Color[Combination.WIDTH];
+		this.colors = new ArrayList<Color>();
 	}
 	
 	static int getWidth() {

@@ -30,7 +30,7 @@ public class Mastermind extends WithConsoleModel {
 		boolean newGame;
 		do {
 			Message.TITLE.writeln();
-			this.secretCombination.writeln();
+			this.secretCombination.writeln();	
 			boolean finished = false;
 			do {
 				ProposedCombination proposedCombination = new ProposedCombination();
