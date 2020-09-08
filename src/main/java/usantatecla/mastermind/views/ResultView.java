@@ -11,7 +11,7 @@ class ResultView {
 	}
 
 	void writeln(int position) {
-		MessageView.RESULT.writeln(this.playController.getBlacks(position), this.playController.getWhites(position));;
+		MessageView.RESULT.writeln(this.playController.getBlacks(position), this.playController.getWhites(position));
 	}
 
 }
