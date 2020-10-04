@@ -4,7 +4,7 @@ Santa Tecla \<<parqueNaturalSantaTecla@gmail.com>\>
 :toc-title: Índice
 :toc: left
 
-## Requisitos 1. **Básica**
+## Requisitos 1. **Bás ica**
 
 <table>
 <colgroup>

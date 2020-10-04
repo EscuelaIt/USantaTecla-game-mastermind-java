@@ -24,8 +24,7 @@
 <li><a href="#vista-de-lógicadiseño">Vista de Lógica/Diseño</a>
 <ul class="sectlevel2">
 <li><a href="#arquitectura">Arquitectura</a></li>
-<li><a href="#paquete-mastermind">Paquete <em>mastermind</em></a></li>
-<li><a href="#paquete-mastermind-utils">Paquete <em>mastermind.utils</em></a></li>
+<li><a href="#paquetes">Paquetes</a></li>
 </ul>
 </li>
 <li><a href="#calidad-del-software">Calidad del Software</a>
@@ -76,7 +75,7 @@
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
 <div class="content">
-<img src = “docs/build/docs/asciidoc/images/Dibujo.jpg" alt="Dibujo">
+<img src="images/Dibujo.jpg" alt="Dibujo">
 </div>
 </div></div></td>
 </tr>
@@ -98,23 +97,15 @@
 <h3 id="arquitectura">Arquitectura</h3>
 <div class="imageblock">
 <div class="content">
-<img src = “build/docs/asciidoc/images/version1Arquitectura.svg" alt="version1Arquitectura" width="274" height="305">
+<img src="images/version1Arquitectura.svg" alt="version1Arquitectura" width="519" height="305">
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="paquete-mastermind">Paquete <em>mastermind</em></h3>
+<h3 id="paquetes">Paquetes</h3>
 <div class="imageblock">
 <div class="content">
-<img src = “build/docs/asciidoc/images/version1Mastermind.svg" alt="version1Mastermind" width="767" height="1221">
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="paquete-mastermind-utils">Paquete <em>mastermind.utils</em></h3>
-<div class="imageblock">
-<div class="content">
-<img src = “build/docs/asciidoc/images/mastermindUtils1.svg" alt="mastermindUtils1" width="456" height="548">
+<img src="images/version1Mastermind.svg" alt="version1Mastermind" width="1156" height="1370">
 </div>
 </div>
 </div>
@@ -179,7 +170,7 @@
 <div class="sectionbody">
 <div class="imageblock">
 <div class="content">
-<img src = “build/docs/asciidoc/images/diagramaImplementacion.svg" alt="diagramaImplementacion" width="518" height="158">
+<img src="images/diagramaImplementacion.svg" alt="diagramaImplementacion" width="518" height="158">
 </div>
 </div>
 </div>
@@ -189,7 +180,7 @@
 <div class="sectionbody">
 <div class="imageblock">
 <div class="content">
-<img src = “build/docs/asciidoc/images/diagramaDespliegue.svg" alt="diagramaDespliegue" width="203" height="207">
+<img src="images/diagramaDespliegue.svg" alt="diagramaDespliegue" width="203" height="207">
 </div>
 </div>
 </div>
@@ -210,7 +201,7 @@
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1<br>
-Last updated 2020-10-04 08:44:10 +0200
+Last updated 2020-10-04 13:29:43 +0200
 </div>
 </div>
 </html>
