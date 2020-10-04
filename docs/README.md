@@ -97,7 +97,7 @@
 <h3 id="arquitectura">Arquitectura</h3>
 <div class="imageblock">
 <div class="content">
-<img src="build/docs/asciidoc/images/version1Arquitectura.svg" alt="version1Arquitectura" width="519" height="305">
+<img src="build/docs/asciidoc/images/version1Arquitectura.svg" alt="version1Arquitectura" width="273" height="305">
 </div>
 </div>
 </div>
@@ -201,7 +201,7 @@
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1<br>
-Last updated 2020-10-04 13:29:43 +0200
+Last updated 2020-10-04 14:48:03 +0200
 </div>
 </div>
 </html>

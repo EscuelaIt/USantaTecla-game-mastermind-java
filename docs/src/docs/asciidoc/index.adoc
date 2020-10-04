@@ -36,12 +36,12 @@ image::Dibujo.jpg[]
 
 package usantatecla.mastermind #DDDDDD { } 
 package java.util{ }
-mastermind .down.> java.util
-mastermind .down.> mastermind.utils
-
 package usantatecla.utils #DDDDDD { } 
 package java.io{ }
-mastermind.utils .down.> java.io
+
+usantatecla.mastermind .down.> java.util
+usantatecla.mastermind .down.> usantatecla.utils
+usantatecla.utils .down.> java.io
 
 ....
 
