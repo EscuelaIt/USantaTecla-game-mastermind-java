@@ -97,7 +97,7 @@
 <h3 id="arquitectura">Arquitectura</h3>
 <div class="imageblock">
 <div class="content">
-<img src="images/version1Arquitectura.svg" alt="version1Arquitectura" width="519" height="305">
+<img src="build/docs/asciidoc/images/version1Arquitectura.svg" alt="version1Arquitectura" width="519" height="305">
 </div>
 </div>
 </div>
@@ -105,7 +105,7 @@
 <h3 id="paquetes">Paquetes</h3>
 <div class="imageblock">
 <div class="content">
-<img src="images/version1Mastermind.svg" alt="version1Mastermind" width="1156" height="1370">
+<img src="build/docs/asciidoc/images/version1Mastermind.svg" alt="version1Mastermind" width="1156" height="1370">
 </div>
 </div>
 </div>
@@ -170,7 +170,7 @@
 <div class="sectionbody">
 <div class="imageblock">
 <div class="content">
-<img src="images/diagramaImplementacion.svg" alt="diagramaImplementacion" width="518" height="158">
+<img src="build/docs/asciidoc/images/diagramaImplementacion.svg" alt="diagramaImplementacion" width="518" height="158">
 </div>
 </div>
 </div>
@@ -180,7 +180,7 @@
 <div class="sectionbody">
 <div class="imageblock">
 <div class="content">
-<img src="images/diagramaDespliegue.svg" alt="diagramaDespliegue" width="203" height="207">
+<img src="build/docs/asciidoc/images/diagramaDespliegue.svg" alt="diagramaDespliegue" width="203" height="207">
 </div>
 </div>
 </div>
