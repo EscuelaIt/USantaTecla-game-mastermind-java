@@ -14,28 +14,28 @@ enum Message {
 
 	private String message;
 	
-	private Console console;
-
 	private Message(String message) {
 		this.message = message;
-		this.console = new Console();
 	}
 
 	void write() {
-		this.console.write(this.message);
+		Console.instance().write(this.message);
 	}
 
 	void writeln() {
-
-		this.console.writeln(this.message);
+		Console.instance().writeln(this.message);
 	}
 
 	void writeln(int attempts) {
-		this.console.writeln(this.message.replaceAll("#attempts", "" + attempts));
+		assert this == Message.ATTEMPTS;
+
+		Console.instance().writeln(this.message.replaceAll("#attempts", "" + attempts));
 	}
 
 	void writeln(int blacks, int whites) {
-		this.console.writeln(this.message.replaceFirst("#blacks", "" + blacks).replaceFirst("#whites", "" + whites));
+		assert this == Message.RESULT;
+
+		Console.instance().writeln(this.message.replaceFirst("#blacks", "" + blacks).replaceFirst("#whites", "" + whites));
 	}
 
 }

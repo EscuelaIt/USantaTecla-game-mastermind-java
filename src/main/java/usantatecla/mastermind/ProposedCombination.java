@@ -1,5 +1,9 @@
 package usantatecla.mastermind;
 
+import java.util.ArrayList;
+
+import usantatecla.utils.Console;
+
 class ProposedCombination extends Combination {
 
 	void write() {
@@ -11,41 +15,32 @@ class ProposedCombination extends Combination {
 	void read() {
 		Error error;
 		do {
-			error = null;
 			Message.PROPOSED_COMBINATION.write();
-			String characters = this.console.readString();
-			if (characters.length() != Combination.getWidth()) {
-				error = Error.WRONG_LENGTH;
-			} else {
-				for (int i = 0; i < characters.length(); i++) {
-					Color color = Color.getInstance(characters.charAt(i));
-					if (color == null) {
-						error = Error.WRONG_CHARACTERS;
-					} else {
-						int j = 0;
-						boolean done = false;
-						while (j < this.colors.size()   && !done) {
-							if (this.colors.get(j) == color) {
-								error = Error.DUPLICATED;
-								done = true;
-							}
-							
-							j++;
-						}
-						
-							this.colors.add(color);
-						
+			error = this.checkError(Console.instance().readString());
+			error.writeln();
+			if (!error.isNull()) {
+				this.colors = new ArrayList<Color>();
+			}
+		} while (!error.isNull());
+	}
+
+	private Error checkError(String characters){
+		if (characters.length() != Result.WIDTH) {
+			return Error.WRONG_LENGTH;
+		}
+		for (int i = 0; i < characters.length(); i++) {
+				Color color = Color.getInstance(characters.charAt(i));
+				if (color.isNull()) {
+					return Error.WRONG_CHARACTERS;
+				}
+				for(int j=0; j<i; j++){
+					if (this.colors.get(j) == color) {
+						return Error.DUPLICATED;
 					}
 				}
-			}
-			if (error != null) {
-				error.writeln();
-				for (int i= 0; i < this.colors.size(); i++) {
-					this.colors.set(i, null);
-				}
-			}
-		} while (error != null);
-
+				this.colors.add(color);
+		}
+		return Error.NULL_ERROR;
 	}
 
 	boolean contains(Color color, int position) {

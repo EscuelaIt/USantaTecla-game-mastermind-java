@@ -50,6 +50,8 @@ mastermind.utils .down.> java.io
 [plantuml,version1Mastermind,svg]
 ....
 
+class X
+
 class  mastermind.Color{
 + {static} RED: Color
 + {static} BLUE: Color

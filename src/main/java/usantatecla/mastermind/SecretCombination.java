@@ -1,17 +1,20 @@
 package usantatecla.mastermind;
 
 import java.util.Random;
+
+import usantatecla.utils.Console;
+
 import java.util.Collections;
 
 class SecretCombination extends Combination {
 
 	SecretCombination() {
 		super();
-		for(Color color: Color.values()) {
-			this.colors.add(color);
+		for(int i=0; i<Color.length(); i++) {
+			this.colors.add(Color.get(i));
 		}
 		Random random = new Random(System.currentTimeMillis());
-		for (int i = 0; i < Color.length() - Combination.getWidth(); i++) {
+		for (int i = 0; i < Color.length() - Result.WIDTH; i++) {
 			this.colors.remove(random.nextInt(this.colors.size()));
 		}
 		Collections.shuffle(this.colors);
@@ -34,20 +37,11 @@ class SecretCombination extends Combination {
 	}
 
 	void writeln() {
-		for (int i = 0; i < Combination.getWidth(); i++) {
-			Message.SECRET.write();
+		Console.instance().write("**** - ");
+		for (Color color : this.colors) {
+			color.write();
 		}
-		this.console.writeln();
-	}
-
-	void shuffleArray(Color[] array) {
-		Random random = new Random(System.currentTimeMillis());
-		for (int i = array.length - 1; i > 0; i--) {
-			int index = random.nextInt(i + 1);
-			Color color = array[index];
-			array[index] = array[i];
-			array[i] = color;
-		}
+		Console.instance().writeln();
 	}
 
 }
