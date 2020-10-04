@@ -76,7 +76,7 @@
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
 <div class="content">
-<img src = “build/docs/asciidoc/images/Dibujo.jpg" alt="Dibujo">
+<img src = “docs/build/docs/asciidoc/images/Dibujo.jpg" alt="Dibujo">
 </div>
 </div></div></td>
 </tr>
