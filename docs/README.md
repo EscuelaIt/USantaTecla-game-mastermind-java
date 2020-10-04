@@ -76,7 +76,7 @@
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
 <div class="content">
-<img src="images/Dibujo.jpg" alt="Dibujo">
+<img src = “build/docs/asciidoc/images/Dibujo.jpg" alt="Dibujo">
 </div>
 </div></div></td>
 </tr>
@@ -98,7 +98,7 @@
 <h3 id="arquitectura">Arquitectura</h3>
 <div class="imageblock">
 <div class="content">
-<img src="images/version1Arquitectura.svg" alt="version1Arquitectura" width="274" height="305">
+<img src = “build/docs/asciidoc/images/version1Arquitectura.svg" alt="version1Arquitectura" width="274" height="305">
 </div>
 </div>
 </div>
@@ -106,7 +106,7 @@
 <h3 id="paquete-mastermind">Paquete <em>mastermind</em></h3>
 <div class="imageblock">
 <div class="content">
-<img src="images/version1Mastermind.svg" alt="version1Mastermind" width="767" height="1221">
+<img src = “build/docs/asciidoc/images/version1Mastermind.svg" alt="version1Mastermind" width="767" height="1221">
 </div>
 </div>
 </div>
@@ -114,7 +114,7 @@
 <h3 id="paquete-mastermind-utils">Paquete <em>mastermind.utils</em></h3>
 <div class="imageblock">
 <div class="content">
-<img src="images/mastermindUtils1.svg" alt="mastermindUtils1" width="456" height="548">
+<img src = “build/docs/asciidoc/images/mastermindUtils1.svg" alt="mastermindUtils1" width="456" height="548">
 </div>
 </div>
 </div>
@@ -179,7 +179,7 @@
 <div class="sectionbody">
 <div class="imageblock">
 <div class="content">
-<img src="images/diagramaImplementacion.svg" alt="diagramaImplementacion" width="518" height="158">
+<img src = “build/docs/asciidoc/images/diagramaImplementacion.svg" alt="diagramaImplementacion" width="518" height="158">
 </div>
 </div>
 </div>
@@ -189,7 +189,7 @@
 <div class="sectionbody">
 <div class="imageblock">
 <div class="content">
-<img src="images/diagramaDespliegue.svg" alt="diagramaDespliegue" width="203" height="207">
+<img src = “build/docs/asciidoc/images/diagramaDespliegue.svg" alt="diagramaDespliegue" width="203" height="207">
 </div>
 </div>
 </div>
